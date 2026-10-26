@@ -20,7 +20,7 @@ export function Badge({ tone = 'neutral', className, ...rest }: BadgeProps) {
     <span
       data-gg="badge"
       data-tone={tone}
-      className={cx('inline-flex items-center gap-1 rounded-pill px-2.5 py-0.5 text-xs font-medium', tones[tone], className)}
+      className={cx('inline-flex w-fit items-center gap-1 rounded-pill px-2.5 py-0.5 text-xs font-medium', tones[tone], className)}
       {...rest}
     />
   );
