@@ -1,0 +1,17 @@
+# GuateGeeks design system
+
+> The GuateGeeks Design Lab: tokens, themes, variants and editions for every GuateGeeks product. Read the context first; use the skills to act.
+
+## Context
+
+- [Context for agents](CONTEXT.md): brand principles, layers, rules, packages, CSS order.
+- [Design spec](../docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md): why and how the lab is built.
+
+## Skills
+
+- [Adopt the design system in a product](skills/adopt-guategeeks-design/SKILL.md)
+- [Create a theme in the lab](skills/create-theme/SKILL.md)
+
+## Checklists
+
+- [Adoption checklist](checklists/adoption.md)

@@ -1,0 +1,8 @@
+{
+  "name": "guategeeks-design",
+  "version": "0.1.0",
+  "description": "GuateGeeks design system: adopt, theme and verify. Skills, context and checklists from the GuateGeeks Design Lab.",
+  "author": { "name": "GuateGeeks" },
+  "repository": "https://github.com/GuateGeeks/design-system",
+  "license": "Apache-2.0"
+}

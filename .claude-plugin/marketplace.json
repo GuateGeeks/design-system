@@ -1,0 +1,11 @@
+{
+  "name": "guategeeks-design",
+  "owner": { "name": "GuateGeeks" },
+  "plugins": [
+    {
+      "name": "guategeeks-design",
+      "source": "./agent-pack",
+      "description": "GuateGeeks design system: adopt, theme and verify."
+    }
+  ]
+}

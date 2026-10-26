@@ -1,7 +1,41 @@
 # GuateGeeks Design Lab — agent notes
 
-The lab where GuateGeeks' design system is built. Spec: `docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md`.
+The lab where GuateGeeks' design system is decided, built and proven. Its packages are the inputs of every GuateGeeks product.
 
-- `packages/*` — published outputs (`@guategeeks/*`); `apps/lab` — the lab app.
-- `npm run build` — generate tokens/themes, compile, build the lab.
-- `npm test` — generate, then run every Vitest project.
+- Spec (why and what): `docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md`
+- Plans (how, per phase): `docs/superpowers/plans/`
+- Context for agents working in *product* repos: `agent-pack/CONTEXT.md` (shipped as the `guategeeks-design` Claude Code plugin)
+
+## Layout
+
+| Path | What |
+|---|---|
+| `packages/tokens` | DTCG token source (`src/source`) → `dist/css/tokens.css`, `dist/css/tailwind.css`, `dist/tokens.json`, generated TS/native |
+| `packages/themes` | Theme manifests (`themes/<id>/theme.json`), editions (`editions/*.json`), build + contrast validation |
+| `packages/theme-runtime` | Controller that sets `data-theme` / `data-scheme` / `data-motion` on `<html>`; React bindings in `/react` |
+| `packages/motion` | Motion presets and semantics (ported from Socrates), theme-aware durations |
+| `packages/ui` | React + Radix + Tailwind components; extension points via `registerVariant` |
+| `apps/lab` | The lab app: Foundations, Components gallery (iframes per viewport), Theme studio; Playwright suites in `e2e/` |
+| `agent-pack` | Context, skills and checklists for agents in product repos |
+
+## Commands
+
+- `npm ci && npm run build` — generate tokens/themes, compile packages, build the lab.
+- `npm test` — generate, then every Vitest project (packages, lab, agent pack).
+- `npm run dev -w @guategeeks/lab` — the lab at http://127.0.0.1:5173 (run `npx tsc -b -w` alongside to pick up package changes; the lab reads packages from `dist`).
+- `npm run e2e` — Playwright smoke, visual (210 screenshots) and axe suites against the built lab. `npm run e2e -- --update-snapshots` after intended visual changes; review the images before committing.
+
+## Rules
+
+- Components and lab UI use semantic tokens only; `packages/ui/test/token-guard.test.ts` fails on hex/rgb literals, raw `ms` durations and Tailwind default palette classes.
+- Tests import packages from source through the `source` export condition (`vitest.shared.ts`); the lab build never does.
+- Generated files (`dist/`, `src/generated/`) are not committed; never edit them by hand.
+- A theme never changes logic. Structural changes are variants registered under an extension point; editions request them.
+- Ported code keeps a provenance header: `// Ported from GuateGeeks/<repo>@<commit>:<path> (Apache-2.0 in this repo)`.
+- Lab UI copy is Spanish; code, package docs and the agent pack are English.
+
+## Adding things
+
+- **Theme**: follow `agent-pack/skills/create-theme/SKILL.md`.
+- **Component**: `packages/ui/src/components/<Name>.tsx` with `data-gg="<name>"`, export from `src/index.ts`, tests in `packages/ui/test/`, a gallery entry in `apps/lab/src/gallery/entries/` registered in `registry.ts`, then update the visual baselines.
+- **Token**: edit `packages/tokens/src/source/**`; semantic color roles also need a value in `semantic/light` and `semantic/dark`, the `COLOR_ROLES` list and contrast pairs if they carry text.
