@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@guategeeks/ui/styles.css";
+@import "@guategeeks/ui/fonts.css";
+@import "@guategeeks/themes/themes.css";
+
+body { margin: 0; }

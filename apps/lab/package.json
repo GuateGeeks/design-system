@@ -1,0 +1,30 @@
+{
+  "name": "@guategeeks/lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -p . --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@guategeeks/motion": "0.1.0",
+    "@guategeeks/theme-runtime": "0.1.0",
+    "@guategeeks/themes": "0.1.0",
+    "@guategeeks/tokens": "0.1.0",
+    "@guategeeks/ui": "0.1.0",
+    "lucide-react": "1.61.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@axe-core/playwright": "4.14.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@vitejs/plugin-react": "6.1.2",
+    "tailwindcss": "4.3.3",
+    "vite": "8.3.5"
+  }
+}
