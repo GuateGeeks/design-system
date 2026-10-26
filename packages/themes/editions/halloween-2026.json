@@ -1,0 +1,8 @@
+{
+  "id": "halloween-2026",
+  "name": "Halloween 2026",
+  "theme": "halloween",
+  "variants": {},
+  "content": { "es": { "banner": "¡Feliz Halloween geek!" } },
+  "window": { "from": "2026-10-24", "to": "2026-11-02", "tz": "America/Guatemala" }
+}

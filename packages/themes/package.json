@@ -4,14 +4,35 @@
   "private": true,
   "type": "module",
   "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./validate": {
       "source": "./src/validate.ts",
       "types": "./dist/validate.d.ts",
       "default": "./dist/validate.js"
-    }
+    },
+    "./build": {
+      "source": "./src/build/index.ts",
+      "types": "./dist/build/index.d.ts",
+      "default": "./dist/build/index.js"
+    },
+    "./native": {
+      "source": "./src/native.ts",
+      "types": "./dist/native.d.ts",
+      "default": "./dist/native.js"
+    },
+    "./themes.css": "./dist/css/themes.css",
+    "./css/*": "./dist/css/*"
   },
   "dependencies": {
+    "@fontsource/creepster": "5.3.0",
     "@guategeeks/tokens": "0.1.0",
     "colorjs.io": "0.7.1"
+  },
+  "scripts": {
+    "generate": "node --conditions=source src/build/cli.ts"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "id": "guategeeks",
+  "name": "GuateGeeks",
+  "schemes": ["light", "dark"],
+  "motion": { "intensity": "standard" }
+}

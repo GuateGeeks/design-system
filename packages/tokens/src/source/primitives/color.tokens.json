@@ -239,10 +239,6 @@
     "white": {
       "$type": "color",
       "$value": "#ffffff"
-    },
-    "ink": {
-      "$type": "color",
-      "$value": "#1e2233"
     }
   }
 }

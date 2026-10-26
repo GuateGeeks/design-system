@@ -1,0 +1,92 @@
+{
+  "id": "halloween",
+  "name": "Halloween",
+  "extends": "guategeeks",
+  "schemes": [
+    "dark"
+  ],
+  "motion": {
+    "intensity": "playful"
+  },
+  "fonts": {
+    "display": {
+      "family": "Creepster",
+      "import": "@fontsource/creepster/400.css"
+    }
+  },
+  "tokens": {
+    "dark": {
+      "color": {
+        "bg": {
+          "$value": "#0f0b14"
+        },
+        "surface": {
+          "$value": "#1a1222"
+        },
+        "surface-2": {
+          "$value": "#251a30"
+        },
+        "ink": {
+          "$value": "#f6efe6"
+        },
+        "ink-muted": {
+          "$value": "#d6c8b8"
+        },
+        "ink-subtle": {
+          "$value": "#b3a28f"
+        },
+        "line": {
+          "$value": "#3b2a48"
+        },
+        "line-soft": {
+          "$value": "#2b1f36"
+        },
+        "action": {
+          "$value": "#ff7a1a"
+        },
+        "on-action": {
+          "$value": "#1a0f05"
+        },
+        "action-hover": {
+          "$value": "#ff9447"
+        },
+        "link": {
+          "$value": "#ffa25c"
+        },
+        "focus": {
+          "$value": "#b6ff3b"
+        },
+        "hero": {
+          "$value": "#5b2a86"
+        },
+        "on-hero": {
+          "$value": "#ffffff"
+        },
+        "wash": {
+          "$value": "#2a1708"
+        },
+        "accent": {
+          "$value": "#b6ff3b"
+        },
+        "ok": {
+          "$value": "#8be36b"
+        },
+        "ok-soft": {
+          "$value": "#1c2f16"
+        },
+        "bad": {
+          "$value": "#ff8a8a"
+        },
+        "bad-soft": {
+          "$value": "#3a1414"
+        },
+        "hint": {
+          "$value": "#c9a7ff"
+        },
+        "hint-soft": {
+          "$value": "#2b1d45"
+        }
+      }
+    }
+  }
+}

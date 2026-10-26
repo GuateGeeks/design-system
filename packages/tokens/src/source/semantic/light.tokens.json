@@ -38,7 +38,7 @@
     },
     "on-action": {
       "$type": "color",
-      "$value": "{color.ink}"
+      "$value": "{color.neutral.950}"
     },
     "action-hover": {
       "$type": "color",
