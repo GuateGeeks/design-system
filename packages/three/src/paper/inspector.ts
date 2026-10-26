@@ -9,6 +9,9 @@ import {
   ShadowMaterial, Group, Vector3, Quaternion, SRGBColorSpace, NeutralToneMapping, PCFShadowMap, Box3
 } from 'three';
 import { createBuilder, releaseEntityGroup, clamp, smooth, backOut, rigidSkinning } from '../kit/campus-kit.ts';
+import { withPalette } from '../kit/palette.ts';
+import { createStage } from '../core/stage.ts';
+import { THREE_PROFILES } from '@guategeeks/themes';
 import { paperKit, newMeta, PAPER } from './kit.ts';
 import { paperMaterials } from './material.ts';
 import { CATALOG, GROUPS } from './catalog.ts';
@@ -55,36 +58,23 @@ export function buildPiece(piece, materials, opts: any = {}) {
   return { piece, group, meta, error, triangles: group.userData.triangles, bounds };
 }
 
-export function createInspector(container, { pieces = CATALOG, ui = false, labels = true } = {}) {
-  const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
-  renderer.outputColorSpace = SRGBColorSpace;
-  renderer.toneMapping = NeutralToneMapping;
-  renderer.toneMappingExposure = 1;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = PCFShadowMap;
+export function createInspector(container, { pieces = CATALOG, ui = false, labels = true, profile: initialProfile = THREE_PROFILES.papercraft, createRenderer = undefined }: any = {}) {
+  // Scene, lights, ground and lifecycle come from the shared stage (core/stage.ts); colours from the theme profile.
+  let profile = initialProfile;
+  const stage = createStage(container, { profile, createRenderer, preserveDrawingBuffer: true });
+  const { renderer, scene, camera } = stage;
+  const sun = stage.lights.sun;
+  camera.near = -200; camera.far = 400; camera.updateProjectionMatrix();
+  stage.lights.sun.position.set(-6, 11, 8);
+  stage.lights.fill.position.set(7, 4, -6);
+  stage.ground.position.y = 0;
   container.style.position = 'relative';
-  container.appendChild(renderer.domElement);
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;font:600 13px/1.2 Inter,system-ui,sans-serif;color:' + PAPER.ink;
   container.appendChild(overlay);
-
-  const scene = new Scene();
-  scene.background = new Color(PAPER.background);
-  scene.add(new HemisphereLight(0xffffff, 0xd9cfe6, 1.55));
-  const sun = new DirectionalLight(0xfff3e4, 2.1);
-  sun.position.set(-6, 11, 8);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
-  sun.shadow.bias = -.0004; sun.shadow.normalBias = .02; sun.shadow.radius = 4;
-  scene.add(sun, sun.target);
-  const fill = new DirectionalLight(0xe6dcff, .45);
-  fill.position.set(7, 4, -6); scene.add(fill);
-  const ground = new Mesh(new PlaneGeometry(400, 400), new ShadowMaterial({ color: 0x3a2470, opacity: .16 }));
-  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
-
-  const camera = new OrthographicCamera(-1, 1, 1, -1, -200, 400);
-  const materials = paperMaterials();
+  let materials = paperMaterials({ fibre: profile.fibre, mottle: profile.mottle });
+  let last = null;
+  const build = (piece) => withPalette(profile.palette, () => buildPiece(piece, materials));
   let shown = [], view = VIEWS['34'], viewName = '34', assembly = 1, focusPoint = null, fixed = null, wire = false, socketsOn = false;
   // Axes and attach points (rest pose, root space of the person): one shared material.
   const socketMaterial = new MeshBasicMaterial({ color: 0xff8b22, depthTest: false, transparent: true });
@@ -214,7 +204,7 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
   function render() { frame(); applyAssembly(); applyWire(); renderer.render(scene, camera); paintLabels(); }
 
   function buildList(ids?) {
-    const list = ids.map(id => pieces.find(piece => piece.id === id)).filter(Boolean).map(piece => buildPiece(piece, materials));
+    const list = ids.map(id => pieces.find(piece => piece.id === id)).filter(Boolean).map(piece => build(piece));
     list.forEach(s => scene.add(s.group));
     return list;
   }
@@ -223,11 +213,13 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
     groups: () => GROUPS.filter(g => pieces.some(p => p.group === g.id)),
     pieces: group => pieces.filter(p => !group || p.group === group).map(p => ({ id: p.id, label: p.label, group: p.group })),
     showGroup(group, { columns }: any = {}) {
+      last = () => api.showGroup(group, { columns });
       clear(); focusPoint = null; fixed = null;
       shown = buildList(pieces.filter(p => p.group === group).map(p => p.id));
       place(shown, columns); render(); return api.info();
     },
     show(id, { view: name = viewName } = {}) {
+      last = () => api.show(id, { view: name });
       clear(); fixed = null; viewName = name; view = VIEWS[name] || VIEWS['34'];
       shown = buildList([id]);
       const s = shown[0];
@@ -236,10 +228,11 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
     },
     /** Show an ad-hoc piece (for example a composed campus) that is not in the catalog. */
     showPiece(piece, { view: name = viewName, frame = null, focus = null, zoom = null } = {}) {
+      last = () => api.showPiece(piece, { view: name, frame, focus, zoom });
       clear(); viewName = name; view = { ...(VIEWS[name] || VIEWS['34']), ...(zoom ? { zoom } : {}) };
       focusPoint = focus ? new Vector3(...focus) : null;
       fixed = frame ? new Box3(new Vector3(frame[0], frame[1], frame[2]), new Vector3(frame[3], frame[4], frame[5])) : null;
-      const s = buildPiece(piece, materials);
+      const s = build(piece);
       scene.add(s.group); shown = [s];
       render(); return { ...api.info()[0], missing: s.meta.missing || [] };
     },
@@ -260,9 +253,10 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
      * Returns id / bone / real triangles per component and the measured landmarks.
      */
     showPerson({ spec = PRIMARIA_BASE, pose = 'rest', only = null, view: name = viewName, zoom = null, focus = null, frame = null } = {}) {
+      last = () => api.showPerson({ spec, pose, only, view: name, zoom, focus, frame });
       clear(); fixed = frame ? new Box3(new Vector3(frame[0], frame[1], frame[2]), new Vector3(frame[3], frame[4], frame[5])) : null; viewName = name; view = { ...(VIEWS[name] || VIEWS['34']), ...(zoom ? { zoom } : {}) };
       focusPoint = focus ? new Vector3(...focus) : null;
-      const s = buildPiece(personPiece({ spec, pose, only }), materials);
+      const s = build(personPiece({ spec, pose, only }));
       scene.add(s.group); shown = [s];
       render();
       const person = s.meta.person;
@@ -283,13 +277,22 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
       return Math.hypot((pa.x - pb.x) / 2 * w, (pa.y - pb.y) / 2 * h);
     },
     /** GPU resources the renderer still holds (leak checks). */
-    memory: () => ({ ...renderer.info.memory, programs: renderer.info.programs?.length ?? null }),
+    memory: () => ({ ...renderer.info.memory, programs: (renderer as any).info.programs?.length ?? null }),
     info: () => shown.map(s => ({ id: s.piece.id, label: s.piece.label, group: s.piece.group, triangles: s.triangles, budget: s.piece.budget ?? null,
       size: s.bounds.isEmpty() ? null : s.bounds.getSize(new Vector3()).toArray().map(v => Math.round(v * 1000) / 1000),
       declared: s.piece.size || null, staged: (s.meta.staged || []).length, error: s.error,
       box: s.bounds.isEmpty() ? null : [...s.bounds.min.toArray(), ...s.bounds.max.toArray()].map(v => Math.round(v * 1000) / 1000) })),
     render,
-    dispose() { clear(); renderer.dispose(); renderer.domElement.remove(); overlay.remove(); }
+    /** Theme profile: scene colours now, palette and paper grain by rebuilding what is shown. */
+    setProfile(next) {
+      profile = next;
+      stage.setProfile(next);
+      clear();
+      new Set(Object.values(materials)).forEach((m: any) => m.dispose());
+      materials = paperMaterials({ fibre: next.fibre, mottle: next.mottle });
+      if (last) last(); else render();
+    },
+    dispose() { clear(); new Set(Object.values(materials)).forEach((m: any) => m.dispose()); stage.dispose(); overlay.remove(); }
   };
   if (ui) { mountUI(container, api); mountPersonUI(container, api); }
   window.addEventListener('resize', render);

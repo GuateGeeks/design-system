@@ -11,3 +11,4 @@ export * from './paper/r2/person-r2.ts';
 export * from './paper/inspector.ts';
 export * from './paper/inspector-person.ts';
 export * from './core/profile.ts';
+export * from './core/stage.ts';
