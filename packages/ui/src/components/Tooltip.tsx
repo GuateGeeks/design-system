@@ -5,12 +5,14 @@ export interface TooltipProps {
   content: ReactNode;
   /** A single focusable element. */
   children: ReactNode;
+  /** Controlled visibility (e.g. pinned open in the lab gallery). */
+  open?: boolean;
 }
 
-export function Tooltip({ content, children }: TooltipProps) {
+export function Tooltip({ content, children, open }: TooltipProps) {
   return (
     <RadixTooltip.Provider delayDuration={300}>
-      <RadixTooltip.Root>
+      <RadixTooltip.Root open={open}>
         <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
         <RadixTooltip.Portal>
           <RadixTooltip.Content

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useEffect } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button, Dialog, ToastProvider, Tooltip, useToast } from '@guategeeks/ui';
@@ -79,5 +80,23 @@ describe('overlays', () => {
     render(<Tooltip content="Copiar valor"><Button>Copiar</Button></Tooltip>);
     await user.tab();
     expect((await screen.findByRole('tooltip')).textContent).toContain('Copiar valor');
+  });
+
+  it('tooltip can be shown open', async () => {
+    render(<Tooltip content="Siempre visible" open><Button>Info</Button></Tooltip>);
+    expect((await screen.findByRole('tooltip')).textContent).toContain('Siempre visible');
+  });
+
+  it('useToast is stable across renders', async () => {
+    const seen = new Set<unknown>();
+    function ShowOnMount() {
+      const toast = useToast();
+      seen.add(toast);
+      useEffect(() => toast.show({ title: 'Una vez' }), [toast]);
+      return null;
+    }
+    render(<ToastProvider><ShowOnMount /></ToastProvider>);
+    await waitFor(() => expect(screen.getAllByText('Una vez').length).toBeGreaterThan(0));
+    expect(seen.size).toBe(1);
   });
 });

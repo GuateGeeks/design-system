@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { Toast as RadixToast } from 'radix-ui';
 import { X } from 'lucide-react';
 import { cx } from '../cx.ts';
@@ -19,8 +19,9 @@ export function ToastProvider({ children }: { children?: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const show = useCallback((toast: ToastInput) => setToasts((all) => [...all, { ...toast, id: Date.now() + all.length }]), []);
   const remove = (id: number) => setToasts((all) => all.filter((t) => t.id !== id));
+  const api = useMemo(() => ({ show }), [show]);
   return (
-    <ToastContext.Provider value={{ show }}>
+    <ToastContext.Provider value={api}>
       <RadixToast.Provider swipeDirection="down" label="Notificaciones">
         {children}
         {toasts.map((t) => (

@@ -12,7 +12,7 @@ export function Toolbar() {
   const { viewport, setViewport } = useLab();
   const current = theme.themes.find((x) => x.id === theme.theme);
   return (
-    <section aria-label={t.label} className="flex flex-wrap items-end gap-4">
+    <section aria-label={t.label} className="flex flex-wrap items-start gap-x-6 gap-y-4">
       <Select
         label={t.theme}
         value={theme.theme}
