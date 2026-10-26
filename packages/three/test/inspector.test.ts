@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { THREE_PROFILES } from '@guategeeks/themes';
 import { CATALOG, createInspector, PAL } from '@guategeeks/three';
 import { fakeEnvironment, fakeRenderer, sizedContainer } from './helpers/fake-gl.ts';
@@ -8,6 +8,15 @@ beforeEach(() => { env = fakeEnvironment(); });
 afterEach(() => env.restore());
 
 describe('inspector on the stage', () => {
+  it('dispose removes every window listener it added', () => {
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+    const inspector = createInspector(sizedContainer(), { createRenderer: () => fakeRenderer(), profile: THREE_PROFILES.papercraft });
+    inspector.dispose();
+    const added = add.mock.calls.map(([type, fn]) => [type, fn]);
+    for (const [type, fn] of added) expect(remove.mock.calls.some(([t, f]) => t === type && f === fn), String(type)).toBe(true);
+  });
+
   it('shows a piece, rebuilds it with a new profile and disposes', () => {
     const renderer = fakeRenderer();
     const container = sizedContainer();

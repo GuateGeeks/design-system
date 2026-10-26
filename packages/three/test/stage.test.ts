@@ -119,6 +119,18 @@ describe('createStage', () => {
     expect(s.getDiagnostics().contextLost).toBe(true);
   });
 
+  it('context restore reports onRestored and renders again', () => {
+    const onRestored = vi.fn();
+    const s = make({ onRestored });
+    s.canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true }));
+    const before = frames();
+    s.canvas.dispatchEvent(new Event('webglcontextrestored'));
+    expect(onRestored).toHaveBeenCalledTimes(1);
+    expect(s.getDiagnostics().contextLost).toBe(false);
+    vi.advanceTimersToNextFrame();
+    expect(frames()).toBeGreaterThan(before);
+  });
+
   it('reports ready after the first render', () => {
     const onReady = vi.fn();
     make({ onReady });
@@ -141,6 +153,7 @@ describe('createStage', () => {
     expect(env.disconnects.intersection).toBe(1);
     expect(env.disconnects.resize).toBe(1);
     expect(renderer.dispose).toHaveBeenCalled();
+    expect(renderer.forceContextLoss).toHaveBeenCalled();
     expect(canvas.isConnected).toBe(false);
   });
 

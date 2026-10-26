@@ -13,10 +13,11 @@ export interface CampusSummaryProps { data: CampusData; visible: boolean; classN
 /** The text alternative of the campus: always in the page; visible when 3D is unavailable. */
 export function CampusSummary({ data, visible, className }: CampusSummaryProps) {
   const text = useMemo(() => {
-    const plan = planCampus(data);
-    const counts = campusCounts(data);
-    const levels = data.levels.map((id) => LEVEL_NAMES[id]);
-    const programs = data.programs.map((id) => PROGRAM_NAMES[id]);
+    // Names come from the normalized plan: unknown ids and malformed values never reach the text.
+    const plan = planCampus(data ?? {});
+    const counts = campusCounts(data ?? ({} as CampusData));
+    const levels = plan.normalized.levels.map((id) => LEVEL_NAMES[id]);
+    const programs = plan.normalized.programs.map((id) => PROGRAM_NAMES[id]);
     return [
       levels.length ? `Niveles: ${list(levels)}.` : 'Aún no hay niveles configurados.',
       `${n(plan.stats.rooms)} aulas y ${n(plan.stats.projectRooms)} talleres representados, con ${n(plan.stats.people)} personas.`,

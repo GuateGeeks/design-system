@@ -26,6 +26,8 @@ export interface RendererLike {
   setSize(width: number, height: number, updateStyle?: boolean): void;
   render(scene: Scene, camera: OrthographicCamera): void;
   dispose(): void;
+  /** Releases the WebGL context now instead of waiting for garbage collection. */
+  forceContextLoss?(): void;
 }
 
 export interface FrameTick {
@@ -46,6 +48,8 @@ export interface StageOptions {
   createRenderer?: () => RendererLike;
   onReady?(): void;
   onLost?(error?: unknown): void;
+  /** The WebGL context came back after a loss; GPU resources are re-uploaded on the next render. */
+  onRestored?(): void;
 }
 
 export interface StageDiagnostics {
@@ -241,6 +245,7 @@ export function createStage(container: HTMLElement, opts: StageOptions): Stage {
     if (disposed) return;
     lost = false;
     ready = false;
+    opts.onRestored?.();
     resize();
     schedule();
   }
@@ -300,6 +305,8 @@ export function createStage(container: HTMLElement, opts: StageOptions): Stage {
       groundMaterial.dispose();
       sun.shadow.map?.dispose();
       renderer.dispose();
+      // Browsers cap live WebGL contexts; free this one now (pages mount and unmount scenes).
+      renderer.forceContextLoss?.();
       canvas.remove();
     },
   };

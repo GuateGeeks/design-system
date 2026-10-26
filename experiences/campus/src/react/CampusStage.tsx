@@ -35,6 +35,8 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
   const [engine, setEngine] = useState<CampusScene | null>(null);
   const [ready, setReady] = useState(false);
   const [lost, setLost] = useState(false);
+  // `failed`: the engine could not start (no WebGL) — the host unmounts. `lost`: a context loss that may come back.
+  const [failed, setFailed] = useState(false);
   const [stats, setStats] = useState<CampusDiagnostics | null>(null);
   const latest = useRef({ onSelect, onEngine, profile, reduced });
   latest.current = { onSelect, onEngine, profile, reduced };
@@ -47,6 +49,7 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
       createRenderer,
       onReady: () => setReady(true),
       onLost: () => { setLost(true); setReady(false); },
+      onRestored: () => setLost(false),
       onSelect: (selection) => latest.current.onSelect?.(selection),
     });
     applied.current = { profile: latest.current.profile, reduced: latest.current.reduced };
@@ -83,16 +86,17 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
   } : {};
   return (
     <div data-gg="campus-stage" data-ready={ready} data-lost={lost} {...attrs} className={cx('gg-campus relative isolate overflow-hidden bg-bg', className)}>
-      {!lost && (
+      {!failed && (
         <ThreeHost
           create={create}
           onEngine={(e) => { setEngine(e); latest.current.onEngine?.(e); }}
-          onError={() => setLost(true)}
-          className="absolute inset-0"
+          onError={() => { setFailed(true); setLost(true); }}
+          className={cx('absolute inset-0', lost && 'invisible')}
         />
       )}
-      {children}
-      <CampusSummary data={data} visible={lost} className={lost ? 'relative m-4' : undefined} />
+      {/* Without 3D the overlays (HUD, feedback) have nothing to act on: the summary takes the whole stage. */}
+      {!lost && children}
+      <CampusSummary data={data} visible={lost} className={lost ? 'relative z-20 m-4 max-h-[calc(100%-2rem)] overflow-y-auto' : undefined} />
     </div>
   );
 }

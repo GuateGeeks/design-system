@@ -12,17 +12,24 @@ export function presetData(n: 1 | 3 | 6): CampusData {
 export const levelStudents = (data: CampusData, level: LevelId): number =>
   data.enrollment.filter((r) => r.levelId === level).reduce((n, r) => n + (r.students ?? 0), 0);
 
-/** Groups and units of every program follow the enrolled levels it serves. */
+const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((id) => b.includes(id));
+
+/**
+ * Groups and units of every program follow the enrolled levels it serves. An entry is kept untouched while
+ * its groups and their students are unchanged (so preset entries keep their sharing, plan and units).
+ */
 function withEquipment(data: CampusData): CampusData {
   const equipment = data.programs.map((programId) => {
     const existing = data.equipment.find((e) => e.programId === programId);
     const groupIds = data.enrollment.filter((r) => (PROGRAM_LEVELS[programId] as readonly string[]).includes(r.levelId)).map((r) => r.id);
-    const students = data.enrollment.filter((r) => groupIds.includes(r.id)).reduce((n, r) => n + (r.students ?? 0), 0);
-    const kept = existing ? existing.groupIds.filter((id) => data.enrollment.some((r) => r.id === id)) : null;
+    const participants = data.enrollment.filter((r) => groupIds.includes(r.id)).reduce((n, r) => n + (r.students ?? 0), 0);
+    if (existing && sameSet(existing.groupIds, groupIds) && (existing.participants === undefined || existing.participants === participants)) return existing;
     return {
-      ...(existing ?? { id: `${programId}@lab`, programId, sharing: 'separate' as const, simIds: [], plan: 'INTEGRA', stations: false }),
-      groupIds: kept && existing && existing.groupIds.length && kept.length === existing.groupIds.length ? kept : groupIds,
-      units: existing?.units ?? (students ? Math.ceil(students / STUDENTS_PER_KIT) : null),
+      ...(existing ?? { id: `${programId}@lab`, programId, sharing: 'separate' as const, plan: 'INTEGRA', stations: false }),
+      groupIds,
+      simIds: (existing?.simIds ?? []).filter((id) => groupIds.includes(id)),
+      participants,
+      units: participants ? Math.ceil(participants / STUDENTS_PER_KIT) : null,
     };
   });
   return { ...data, equipment };
@@ -34,13 +41,13 @@ export function setLevel(data: CampusData, level: LevelId, on: boolean): CampusD
   const enrollment = on
     ? [...data.enrollment, { id: `${level}-lab`, levelId: level, label: LEVEL_NAMES[level], students: 30 }]
     : data.enrollment.filter((r) => r.levelId !== level);
-  return withEquipment({ ...data, levels, enrollment, equipment: data.equipment.map((e) => ({ ...e, units: on ? e.units : null })) });
+  return withEquipment({ ...data, levels, enrollment });
 }
 
 export function setStudents(data: CampusData, level: LevelId, students: number): CampusData {
   if (!data.levels.includes(level)) return data;
   const enrollment = [...data.enrollment.filter((r) => r.levelId !== level), { id: `${level}-lab`, levelId: level, label: LEVEL_NAMES[level], students }];
-  return withEquipment({ ...data, enrollment, equipment: data.equipment.map((e) => ({ ...e, units: null, groupIds: [] })) });
+  return withEquipment({ ...data, enrollment });
 }
 
 export function setProgram(data: CampusData, program: ProgramId, on: boolean): CampusData {

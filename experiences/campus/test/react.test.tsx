@@ -60,6 +60,31 @@ describe('CampusStage', () => {
   });
 });
 
+describe('CampusStage without 3D', () => {
+  it('a lost context shows the summary instead of the overlays, and a restore brings the scene back', () => {
+    const engine = fakeEngine();
+    let options: { onLost?(): void; onRestored?(): void } = {};
+    render(<ThemeProvider controller={controller()} options={{ themes, editions }}>
+      <CampusStage data={data} createScene={(_el, o) => { options = o; return engine; }}><div>Superposición</div></CampusStage>
+    </ThemeProvider>);
+    expect(screen.getByText('Superposición')).toBeTruthy();
+    act(() => options.onLost!());
+    expect(screen.queryByText('Superposición')).toBeNull();
+    expect(screen.getByRole('region', { name: 'Resumen del campus' }).className).not.toContain('sr-only');
+    expect(engine.dispose).not.toHaveBeenCalled();
+    act(() => options.onRestored!());
+    expect(screen.getByText('Superposición')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Resumen del campus' }).className).toContain('sr-only');
+  });
+
+  it('when 3D cannot start, the overlays are not shown over the summary', () => {
+    render(<ThemeProvider controller={controller()} options={{ themes, editions }}>
+      <CampusStage data={data} createScene={() => { throw new Error('no webgl'); }}><div>Superposición</div></CampusStage>
+    </ThemeProvider>);
+    expect(screen.queryByText('Superposición')).toBeNull();
+  });
+});
+
 describe('CampusHud', () => {
   it('buttons call the engine', async () => {
     const user = userEvent.setup();
@@ -102,6 +127,15 @@ describe('CampusHud', () => {
 });
 
 describe('CampusSummary', () => {
+  it('describes malformed data without undefined or negative numbers', () => {
+    const bad = { levels: ['pre', 'zzz'], programs: ['x'], enrollment: [{ id: 'a', levelId: 'pre', students: -50 }], equipment: [{ id: 'e', programId: 'tale', units: -3, groupIds: ['a'] }] } as unknown as CampusData;
+    render(<CampusSummary data={bad} visible />);
+    const text = screen.getByRole('region', { name: 'Resumen del campus' }).textContent ?? '';
+    expect(text).not.toMatch(/undefined|NaN|-\d/);
+    expect(text).toMatch(/Preprimaria/);
+    expect(() => render(<CampusSummary data={{} as CampusData} visible />)).not.toThrow();
+  });
+
   it('is visually hidden while 3D works and visible otherwise', () => {
     const { rerender } = render(<CampusSummary data={data} visible={false} />);
     expect(screen.getByRole('region', { name: 'Resumen del campus' }).className).toContain('sr-only');

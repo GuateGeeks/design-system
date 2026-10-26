@@ -36,7 +36,8 @@ export function CampusHud({ engine, data, paused, onPausedChange, profile, defau
   const [legend, setLegend] = useState(false);
   const [expanded, setExpanded] = useState(defaultExpanded);
   const counts = campusCounts(data);
-  const unitsPending = data.equipment.length > 0 && data.equipment.every((e) => e.units == null);
+  const equipment = Array.isArray(data?.equipment) ? data.equipment : [];
+  const unitsPending = equipment.length > 0 && equipment.every((e) => e?.units == null);
   const off = !engine;
   const swatch = (key: string) => profile?.palette[key] ?? PAL[key];
   return (

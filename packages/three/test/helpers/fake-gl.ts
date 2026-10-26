@@ -17,6 +17,7 @@ export function fakeRenderer() {
     setSize: vi.fn(),
     render: vi.fn(),
     dispose: vi.fn(),
+    forceContextLoss: vi.fn(),
   };
 }
 

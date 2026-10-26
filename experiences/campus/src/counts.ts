@@ -11,16 +11,24 @@ export interface CampusCounts {
   teams: number;
 }
 
-/** The HUD counters, from the configuration alone (cotizador asesor.js campusCounts()). */
+/** A count from untrusted input: finite and never negative. */
+const count = (value: unknown) => {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? Math.round(n) : 0;
+};
+
+/** The HUD counters, from the configuration alone (cotizador asesor.js campusCounts()). Malformed input counts as zero. */
 export function campusCounts(data: CampusData): CampusCounts {
-  const rows = new Map(data.enrollment.map((row) => [row.id, row.students ?? 0]));
-  const sumOf = (ids: Iterable<string>) => [...new Set(ids)].reduce((n, id) => n + (rows.get(id) ?? 0), 0);
-  const registered = data.enrollment.length ? sumOf(rows.keys()) : data.students ?? 0;
-  const equipment = data.equipment ?? [];
+  const enrollment = (Array.isArray(data?.enrollment) ? data.enrollment : []).filter((r) => r && typeof r.id === 'string');
+  const equipment = (Array.isArray(data?.equipment) ? data.equipment : []).filter((e) => e && typeof e === 'object');
+  const rows = new Map(enrollment.map((row) => [row.id, count(row.students)]));
+  const ids = (list: unknown) => (Array.isArray(list) ? list.filter((id): id is string => typeof id === 'string') : []);
+  const sumOf = (list: Iterable<string>) => [...new Set(list)].reduce((n, id) => n + (rows.get(id) ?? 0), 0);
+  const registered = enrollment.length ? sumOf(rows.keys()) : count(data?.students);
   return {
-    attended: equipment.length ? sumOf(equipment.flatMap((e) => e.groupIds)) : registered,
-    participations: equipment.reduce((n, e) => n + (e.participants ?? sumOf(e.groupIds)), 0),
-    simultaneous: equipment.filter((e) => e.sharing === 'simultaneous').reduce((n, e) => n + sumOf(e.simIds ?? []), 0),
-    teams: equipment.reduce((n, e) => n + (e.units ?? 0), 0),
+    attended: equipment.length ? sumOf(equipment.flatMap((e) => ids(e.groupIds))) : registered,
+    participations: equipment.reduce((n, e) => n + (e.participants != null ? count(e.participants) : sumOf(ids(e.groupIds))), 0),
+    simultaneous: equipment.filter((e) => e.sharing === 'simultaneous').reduce((n, e) => n + sumOf(ids(e.simIds)), 0),
+    teams: equipment.reduce((n, e) => n + count(e.units), 0),
   };
 }

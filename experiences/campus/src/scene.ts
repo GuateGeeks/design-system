@@ -37,6 +37,8 @@ export interface CampusSceneOptions {
   createRenderer?: StageOptions['createRenderer'];
   onReady?(): void;
   onLost?(error?: unknown): void;
+  /** The WebGL context came back: the scene redraws from the last data. */
+  onRestored?(): void;
   onSelect?(selection: { kind: 'level' | 'program'; id: string }): void;
 }
 
@@ -82,6 +84,8 @@ export function createCampusScene(container: HTMLElement, opts: CampusSceneOptio
     profile, reducedMotion: reduced, createRenderer: opts.createRenderer,
     onReady: () => { ready = true; opts.onReady?.(); },
     onLost: (error) => { lost = true; ready = false; opts.onLost?.(error); },
+    // As the cotizador did on webglcontextrestored: clear the loss and replay the last data.
+    onRestored: () => { lost = false; opts.onRestored?.(); update(lastData); },
   });
   const { scene, camera, canvas, renderer } = stage;
   canvas.classList.add('gg-campus-canvas');

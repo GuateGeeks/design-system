@@ -44,6 +44,26 @@ describe('campus model', () => {
   });
 });
 
+describe('campus model: programs follow the levels', () => {
+  it('adding a level extends programs that serve it, with units recomputed', () => {
+    let data = setLevel(presetData(1), 'prim', true);
+    data = setProgram(data, 'electronics', true);
+    const before = data.equipment.find((e) => e.programId === 'electronics')!;
+    data = setLevel(data, 'bas', true);
+    const after = data.equipment.find((e) => e.programId === 'electronics')!;
+    expect(after.groupIds.sort()).toEqual(['bas-lab', 'prim-lab']);
+    expect(after.units).toBeGreaterThan(before.units!);
+  });
+
+  it('unrelated programs keep their groups when a level is added', () => {
+    let data = setLevel(presetData(1), 'pre', true);
+    data = setProgram(data, 'tale', true);
+    const tale = data.equipment.find((e) => e.programId === 'tale')!;
+    data = setLevel(data, 'bach', true);
+    expect(data.equipment.find((e) => e.programId === 'tale')).toEqual(tale);
+  });
+});
+
 describe('CampusDemo', () => {
   it('toggling a program updates the stage data', async () => {
     const user = userEvent.setup();

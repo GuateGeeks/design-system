@@ -292,7 +292,7 @@ export function createInspector(container, { pieces = CATALOG, ui = false, label
       materials = paperMaterials({ fibre: next.fibre, mottle: next.mottle });
       if (last) last(); else render();
     },
-    dispose() { clear(); new Set(Object.values(materials)).forEach((m: any) => m.dispose()); stage.dispose(); overlay.remove(); }
+    dispose() { window.removeEventListener('resize', render); clear(); new Set(Object.values(materials)).forEach((m: any) => m.dispose()); stage.dispose(); overlay.remove(); }
   };
   if (ui) { mountUI(container, api); mountPersonUI(container, api); }
   window.addEventListener('resize', render);

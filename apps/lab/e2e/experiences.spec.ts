@@ -64,3 +64,38 @@ test('no WebGL shows the summary', async ({ page }) => {
   await expect(page.getByRole('switch', { name: 'Drones' })).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('no WebGL on a phone: the summary is readable, not hidden behind overlays', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+      return /webgl/.test(type) ? null : (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+  await page.goto('./?edition=none#/experiences');
+  const summary = page.getByRole('region', { name: 'Resumen del campus' });
+  await summary.scrollIntoViewIfNeeded();
+  const line = summary.locator('li').first();
+  const box = (await line.boundingBox())!;
+  const onTop = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('[data-gg="campus-summary"]') != null, { x: box.x + 8, y: box.y + box.height / 2 });
+  expect(onTop).toBe(true);
+});
+
+test('a lost WebGL context comes back', async ({ page }) => {
+  await openCampus(page);
+  const lose = await page.evaluate(() => {
+    const canvas = document.querySelector('[data-gg="campus-stage"] canvas') as HTMLCanvasElement;
+    const gl = (canvas.getContext('webgl2') ?? canvas.getContext('webgl')) as WebGLRenderingContext | null;
+    const ext = gl?.getExtension('WEBGL_lose_context');
+    (window as unknown as { __lose?: unknown }).__lose = ext;
+    ext?.loseContext();
+    return !!ext;
+  });
+  expect(lose).toBe(true);
+  await expect(stage(page)).toHaveAttribute('data-lost', 'true');
+  await page.evaluate(() => ((window as unknown as { __lose: { restoreContext(): void } }).__lose).restoreContext());
+  await expect(stage(page)).toHaveAttribute('data-lost', 'false', { timeout: 10_000 });
+  await expect(stage(page)).toHaveAttribute('data-ready', 'true', { timeout: 10_000 });
+  await expect(page.getByRole('region', { name: 'Resumen del campus' })).toHaveClass(/sr-only/);
+});

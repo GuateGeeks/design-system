@@ -117,6 +117,21 @@ describe('createCampusScene', () => {
     expect(s.getDiagnostics().contextLost).toBe(true);
   });
 
+  it('recovers after a context restore', () => {
+    const onRestored = vi.fn();
+    const s = make({ onRestored });
+    s.update(stateInput(3));
+    frames();
+    const canvas = container.querySelector('canvas')!;
+    canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true }));
+    expect(s.getDiagnostics().contextLost).toBe(true);
+    canvas.dispatchEvent(new Event('webglcontextrestored'));
+    frames();
+    expect(onRestored).toHaveBeenCalledTimes(1);
+    expect(s.getDiagnostics().contextLost).toBe(false);
+    expect(s.getDiagnostics().entities).toBeGreaterThan(0);
+  });
+
   it('budget at the maximum configuration', () => {
     const s = make();
     s.update(stateInput(6));
