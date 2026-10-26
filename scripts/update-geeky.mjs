@@ -3,7 +3,8 @@
  *
  *   node scripts/update-geeky.mjs <X.Y.Z | vX.Y.Z | latest>      (npm run geeky:update -- 1.2.0)
  *
- * Pins `@guategeeks/geeky` to the release tag, reinstalls and adds a changeset. It never moves backwards:
+ * Pins `@guategeeks/geeky` to the release tag, reinstalls it, checks that the lockfile installs the tag's commit
+ * and adds a changeset. It never moves backwards:
  * when the requested version is not newer than the pinned one it changes nothing. In GitHub Actions it
  * writes `changed=true|false` and `version` to $GITHUB_OUTPUT (.github/workflows/update-geeky.yml).
  */
@@ -33,6 +34,17 @@ export function shouldUpdate(current, next) {
   return false;
 }
 
+/** The commit package-lock.json installs for @guategeeks/geeky, or null. */
+export function lockedCommit(lock) {
+  return /#([0-9a-f]{40})$/.exec(lock.packages?.['node_modules/@guategeeks/geeky']?.resolved ?? '')?.[1] ?? null;
+}
+
+/** The commit a tag points at, from `git ls-remote <repo> refs/tags/vX refs/tags/vX^{}` (annotated tags peeled). */
+export function tagCommit(lsRemote) {
+  const lines = lsRemote.trim().split('\n').filter(Boolean).map((line) => line.split('\t'));
+  return (lines.find(([, ref]) => ref.endsWith('^{}')) ?? lines[0])?.[0] ?? null;
+}
+
 export function changeset(version) {
   return `---\n"@guategeeks/mascot": minor\n---\n\nUpdate Geeky to v${version} (${GEEKY_REPO}).\n`;
 }
@@ -57,8 +69,14 @@ function main(requested = 'latest') {
     output({ changed: false, version: current });
     return;
   }
+  // Installing the spec explicitly makes npm resolve the tag again; a plain `npm install` keeps a locked commit
+  // whose version already matches (for example the branch commit a tag was cut from).
+  run('npm', ['install', '--no-audit', '--no-fund', '-w', '@guategeeks/mascot', `@guategeeks/geeky@${spec}`], { stdio: 'inherit' });
   run('npm', ['pkg', 'set', '-w', '@guategeeks/mascot', `dependencies.@guategeeks/geeky=${spec}`]);
-  run('npm', ['install', '--no-audit', '--no-fund'], { stdio: 'inherit' });
+  const tag = `refs/tags/v${next}`;
+  const expected = tagCommit(run('git', ['ls-remote', `https://github.com/${GEEKY_REPO}.git`, tag, `${tag}^{}`]));
+  const locked = lockedCommit(JSON.parse(readFileSync(new URL('package-lock.json', root), 'utf8')));
+  if (!expected || locked !== expected) throw new Error(`package-lock.json installs ${locked} but v${next} is ${expected}`);
   writeFileSync(new URL(`.changeset/geeky-v${next}.md`, root), changeset(next));
   console.log(`geeky ${current ? `v${current}` : 'unpinned'} -> v${next}`);
   output({ changed: true, version: next });
