@@ -20,7 +20,8 @@ const NAV: Array<{ id: Section; icon: React.ReactNode }> = [
 
 export function App() {
   const route = useRoute();
-  if ('frame' in route) return <FrameRoute {...route.frame} />;
+  // Keyed by the whole frame identity: a hash-only change must not reuse the previous frame's controller or toasts.
+  if ('frame' in route) return <FrameRoute key={JSON.stringify(route.frame)} {...route.frame} />;
   const section = 'section' in route ? route.section : null;
   return (
     <ThemeProvider options={{ themes, editions }}>
