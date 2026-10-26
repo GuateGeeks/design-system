@@ -2,5 +2,5 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "rootDir": "src", "outDir": "dist" },
   "include": ["src"],
-  "references": [{ "path": "../tokens" }, { "path": "../motion" }, { "path": "../theme-runtime" }]
+  "references": [{ "path": "../tokens" }, { "path": "../themes" }, { "path": "../motion" }, { "path": "../theme-runtime" }]
 }

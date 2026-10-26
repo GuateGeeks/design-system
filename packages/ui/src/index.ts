@@ -16,3 +16,6 @@ export { Dialog, type DialogProps } from './components/Dialog.tsx';
 export { Tooltip, type TooltipProps } from './components/Tooltip.tsx';
 export { ToastProvider, useToast, type ToastInput, type ToastTone } from './components/Toast.tsx';
 export { useMediaQuery } from './hooks/useMediaQuery.ts';
+export { AppShell, type AppShellProps, type AppShellNavItem } from './components/AppShell.tsx';
+export { Progress, type ProgressProps } from './components/Progress.tsx';
+export { registerVariant, getVariants, VariantSlot, type VariantSlotProps } from './variants.tsx';

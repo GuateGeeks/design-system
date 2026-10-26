@@ -21,7 +21,8 @@
     "@guategeeks/theme-runtime": "0.1.0",
     "@guategeeks/tokens": "0.1.0",
     "lucide-react": "1.61.0",
-    "radix-ui": "1.8.1"
+    "radix-ui": "1.8.1",
+    "@guategeeks/themes": "0.1.0"
   },
   "peerDependencies": {
     "react": "19.3.1",
