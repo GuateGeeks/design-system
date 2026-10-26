@@ -16,10 +16,11 @@ const buttons = (props: { disabled?: boolean; loading?: boolean } = {}) => (
 export const button: GalleryEntry = {
   id: 'button',
   name: 'Button',
+  group: 'actions',
   description: 'Acción principal en coral con tinta oscura; secundaria, fantasma y héroe en ciruela.',
   states: [
     { id: 'default', label: 'Variantes', render: () => buttons() },
-    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{buttons()}</FocusFirst> },
+    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{buttons()}</FocusFirst>, preview: 'link' },
     { id: 'disabled', label: 'Deshabilitado', render: () => buttons({ disabled: true }) },
     { id: 'loading', label: 'Cargando', render: () => buttons({ loading: true }) },
   ],
@@ -36,10 +37,11 @@ const icons = (disabled = false) => (
 export const iconButton: GalleryEntry = {
   id: 'icon-button',
   name: 'IconButton',
+  group: 'actions',
   description: 'Botón solo con icono; siempre lleva un nombre accesible y mide al menos 44 px.',
   states: [
     { id: 'default', label: 'Variantes', render: () => icons() },
-    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{icons()}</FocusFirst> },
+    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{icons()}</FocusFirst>, preview: 'link' },
     { id: 'disabled', label: 'Deshabilitado', render: () => icons(true) },
   ],
 };
@@ -53,9 +55,10 @@ const paragraph = (
 export const link: GalleryEntry = {
   id: 'link',
   name: 'Link',
+  group: 'actions',
   description: 'Enlace en texto con coral oscuro para conservar el contraste sobre superficies claras.',
   states: [
     { id: 'default', label: 'En texto', render: () => paragraph },
-    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{paragraph}</FocusFirst> },
+    { id: 'focus', label: 'Foco', render: () => <FocusFirst>{paragraph}</FocusFirst>, preview: 'link' },
   ],
 };

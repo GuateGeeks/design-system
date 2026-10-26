@@ -15,7 +15,7 @@ The lab where GuateGeeks' design system is decided, built and proven. Its packag
 | `packages/theme-runtime` | Controller that sets `data-theme` / `data-scheme` / `data-motion` on `<html>`; React bindings in `/react` |
 | `packages/motion` | Motion presets and semantics (ported from Socrates), theme-aware durations |
 | `packages/ui` | React + Radix + Tailwind components; extension points via `registerVariant` |
-| `apps/lab` | The lab app: Foundations, Components gallery (iframes per viewport), Theme studio; Playwright suites in `e2e/` |
+| `apps/lab` | The lab app: Foundations, Components page (every component and state inline; full-screen states in device frames), Theme studio; Playwright suites in `e2e/` |
 | `agent-pack` | Context, skills and checklists for agents in product repos |
 
 ## Commands
@@ -23,7 +23,7 @@ The lab where GuateGeeks' design system is decided, built and proven. Its packag
 - `npm ci && npm run build` — generate tokens/themes, compile packages, build the lab.
 - `npm test` — generate, then every Vitest project (packages, lab, agent pack).
 - `npm run dev -w @guategeeks/lab` — the lab at http://127.0.0.1:5173 (run `npx tsc -b -w` alongside to pick up package changes; the lab reads packages from `dist`).
-- `npm run e2e` — Playwright smoke, visual (210 screenshots) and axe suites against the built lab. `npm run e2e -- --update-snapshots` after intended visual changes; review the images before committing.
+- `npm run e2e` — Playwright smoke, visual (every frame × theme × viewport) and axe suites against the built lab. `npm run e2e -- --update-snapshots` after intended visual changes; review the images before committing.
 
 ## Rules
 

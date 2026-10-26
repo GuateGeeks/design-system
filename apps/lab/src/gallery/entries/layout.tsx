@@ -5,11 +5,13 @@ import type { GalleryEntry } from '../types.ts';
 export const appShell: GalleryEntry = {
   id: 'app-shell',
   name: 'AppShell',
+  group: 'structure',
   description: 'Navegación lateral desde 1024 px y barra inferior en teléfonos y tabletas.',
   states: [
     {
       id: 'default',
       label: 'Navegación',
+      preview: 'frame',
       render: () => (
         <div className="-m-6">
           <AppShell
@@ -36,6 +38,7 @@ export const appShell: GalleryEntry = {
 export const progress: GalleryEntry = {
   id: 'progress',
   name: 'Progress',
+  group: 'structure',
   description: 'Punto de extensión: las ediciones pueden cambiar la barra por niveles de XP, constelaciones o tarjetas perforadas.',
   states: [
     { id: 'default', label: 'En curso', render: () => <div className="max-w-md"><Progress value={7} max={12} label="Avance de la unidad" milestones={[4, 8]} /></div> },

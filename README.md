@@ -6,7 +6,7 @@ The laboratory where GuateGeeks decides, builds and proves how its products look
 - **Themes** — the GuateGeeks brand (light and dark) plus special looks such as Halloween, switched live with `data-theme` and verified for WCAG 2.2 AA contrast at build time.
 - **Variants and editions** — structural changes through extension points (Progress today), bundled with a theme, content and dates into editions such as *Halloween 2026*.
 - **Components** — accessible React components on Radix, styled only with semantic tokens.
-- **The lab** — Foundations, a Components gallery rendered in real phone/tablet/desktop frames, and a Theme studio that exports `theme.json`.
+- **The lab** — Foundations, a Components page showing every component and state in one place (full-screen ones in phone/tablet/desktop frames), and a Theme studio that exports `theme.json`.
 - **Agent pack** — context, skills and checklists so agents in product repos can adopt and sync the design.
 
 Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md](docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md). This repository delivers phase 1 (foundation); the 3D kit from the cotizador, more themes and editions, and product adoption follow.
@@ -40,7 +40,7 @@ npm test
 npm run e2e
 ```
 
-`npm test` runs every Vitest project (tokens, themes, runtime, motion, UI, lab, agent pack). `npm run e2e` runs the Playwright smoke tests, 210 visual baselines (every component state × brand light, brand dark, Halloween × phone, desktop) and axe accessibility checks against the built lab. After an intended visual change: `npm run e2e -- --update-snapshots`, then review the new images.
+`npm test` runs every Vitest project (tokens, themes, runtime, motion, UI, lab, agent pack). `npm run e2e` runs the Playwright smoke tests, visual baselines (every component state × brand light, brand dark, Halloween × phone, desktop) and axe accessibility checks against the built lab. After an intended visual change: `npm run e2e -- --update-snapshots`, then review the new images.
 
 ## Use it from a product
 

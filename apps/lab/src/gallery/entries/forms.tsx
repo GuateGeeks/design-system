@@ -35,6 +35,7 @@ const levels = [
 export const tabs: GalleryEntry = {
   id: 'tabs',
   name: 'Tabs',
+  group: 'forms',
   description: 'Pestañas para alternar vistas relacionadas; se navegan con flechas.',
   states: [
     {
@@ -54,6 +55,7 @@ export const tabs: GalleryEntry = {
 export const segmentedControl: GalleryEntry = {
   id: 'segmented-control',
   name: 'SegmentedControl',
+  group: 'forms',
   description: 'Elección única entre pocas opciones visibles; las flechas cambian la selección.',
   states: [
     { id: 'default', label: 'Normal', render: () => <SegmentedDemo /> },
@@ -64,6 +66,7 @@ export const segmentedControl: GalleryEntry = {
 export const switchEntry: GalleryEntry = {
   id: 'switch',
   name: 'Switch',
+  group: 'forms',
   description: 'Interruptor para preferencias que se aplican de inmediato.',
   states: [
     { id: 'default', label: 'Normal', render: () => <div className="max-w-xs"><Switch label="Sonidos" defaultChecked /><Switch label="Narración" /></div> },
@@ -74,6 +77,7 @@ export const switchEntry: GalleryEntry = {
 export const textField: GalleryEntry = {
   id: 'text-field',
   name: 'TextField',
+  group: 'forms',
   description: 'Campo de texto con etiqueta visible, ayuda y error anunciados al lector de pantalla.',
   states: [
     { id: 'default', label: 'Normal', render: () => <TextField className="max-w-sm" label="Nombre de la escuela" hint="Como aparece en documentos oficiales" placeholder="Colegio…" /> },
@@ -85,6 +89,7 @@ export const textField: GalleryEntry = {
 export const numberStepper: GalleryEntry = {
   id: 'number-stepper',
   name: 'NumberStepper',
+  group: 'forms',
   description: 'Cantidades con botones grandes y entrada directa; el valor se ajusta a los límites.',
   states: [
     { id: 'default', label: 'Normal', render: () => <StepperDemo /> },
@@ -95,6 +100,7 @@ export const numberStepper: GalleryEntry = {
 export const select: GalleryEntry = {
   id: 'select',
   name: 'Select',
+  group: 'forms',
   description: 'Lista desplegable para elegir entre muchas opciones.',
   states: [
     { id: 'default', label: 'Normal', render: () => <Select className="max-w-xs" label="Nivel" options={levels} defaultValue="pri" /> },

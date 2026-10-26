@@ -6,6 +6,7 @@ import type { GalleryEntry } from '../types.ts';
 export const card: GalleryEntry = {
   id: 'card',
   name: 'Card',
+  group: 'surfaces',
   description: 'Superficie con borde de 1 px y radio de tarjeta; la versión interactiva resalta al pasar o enfocar.',
   states: [
     {
@@ -36,6 +37,7 @@ export const card: GalleryEntry = {
 export const badge: GalleryEntry = {
   id: 'badge',
   name: 'Badge',
+  group: 'surfaces',
   description: 'Etiquetas de estado con tonos semánticos: neutro, acción, correcto, error y pista.',
   states: [
     {
@@ -57,6 +59,7 @@ export const badge: GalleryEntry = {
 export const glassPanel: GalleryEntry = {
   id: 'glass-panel',
   name: 'GlassPanel',
+  group: 'surfaces',
   description: 'Vidrio para HUD y controles flotantes sobre escenas; opaco si se prefiere menos transparencia.',
   states: [
     {
@@ -79,6 +82,7 @@ export const glassPanel: GalleryEntry = {
 export const emptyState: GalleryEntry = {
   id: 'empty-state',
   name: 'EmptyState',
+  group: 'surfaces',
   description: 'Mensaje para listas vacías o búsquedas sin resultado, con una acción para continuar.',
   states: [
     {

@@ -3,9 +3,18 @@ import { dialog, toast, tooltip } from './entries/overlays.tsx';
 import { numberStepper, segmentedControl, select, switchEntry, tabs, textField } from './entries/forms.tsx';
 import { appShell, progress } from './entries/layout.tsx';
 import { badge, card, emptyState, glassPanel } from './entries/surfaces.tsx';
-import type { GalleryEntry, GalleryState } from './types.ts';
+import type { GalleryEntry, GalleryState, GroupId } from './types.ts';
 
-export type { GalleryEntry, GalleryState };
+export type { GalleryEntry, GalleryState, GroupId };
+
+/** Sections of the Components page, in order. */
+export const GROUPS: ReadonlyArray<{ id: GroupId; label: string }> = [
+  { id: 'actions', label: 'Acciones' },
+  { id: 'surfaces', label: 'Superficies' },
+  { id: 'forms', label: 'Formularios' },
+  { id: 'overlays', label: 'Superposiciones' },
+  { id: 'structure', label: 'Estructura' },
+];
 
 /** Every component shown in the lab, in the order the gallery lists them. */
 export const registry: GalleryEntry[] = [
