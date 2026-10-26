@@ -11,6 +11,7 @@
 
 - [Adopt the design system in a product](skills/adopt-guategeeks-design/SKILL.md)
 - [Create a theme in the lab](skills/create-theme/SKILL.md)
+- [Build or adopt a 3D experience](skills/build-3d-experience/SKILL.md)
 
 ## Checklists
 

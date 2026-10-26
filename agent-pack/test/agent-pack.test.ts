@@ -25,7 +25,7 @@ describe('agent pack', () => {
 
   it('skills have valid frontmatter', () => {
     const skills = readdirSync(join(PACK, 'skills'));
-    expect(skills.sort()).toEqual(['adopt-guategeeks-design', 'create-theme']);
+    expect(skills.sort()).toEqual(['adopt-guategeeks-design', 'build-3d-experience', 'create-theme']);
     for (const skill of skills) {
       const text = read(join(PACK, 'skills', skill, 'SKILL.md'));
       const front = /^---\n([\s\S]*?)\n---\n/.exec(text)?.[1] ?? '';
@@ -58,7 +58,7 @@ describe('agent pack', () => {
 
   it('llms.txt indexes the context, skills and checklist', () => {
     const index = read(join(PACK, 'llms.txt'));
-    for (const target of ['CONTEXT.md', 'skills/adopt-guategeeks-design/SKILL.md', 'skills/create-theme/SKILL.md', 'checklists/adoption.md']) {
+    for (const target of ['CONTEXT.md', 'skills/adopt-guategeeks-design/SKILL.md', 'skills/create-theme/SKILL.md', 'skills/build-3d-experience/SKILL.md', 'checklists/adoption.md']) {
       expect(index).toContain(`(${target})`);
     }
   });

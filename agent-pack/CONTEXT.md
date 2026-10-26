@@ -43,6 +43,10 @@ Edition priority at runtime: explicit user choice > `?edition=<id>` (preview; `?
 | `@guategeeks/motion` | `play(el, 'feedback.correct')`, presets, `stagger`, `flip`, `countUp` — theme-aware durations |
 | `@guategeeks/ui` | React components on Radix: Button, Card, Dialog/BottomSheet, AppShell, Progress, … |
 
+## 3D
+
+3D lives in `@guategeeks/three` (stage, orbit camera, papercraft kit, `ThreeHost`), `@guategeeks/mascot` (Geeky 3D) and `@guategeeks/experience-campus` (the cotizador campus). Every theme has a 3D profile (`ResolvedTheme.three`: background, lights, paper grain, palette); scenes render on demand, respect reduced motion, stay within budgets and always ship a text alternative. See the [build-3d-experience skill](skills/build-3d-experience/SKILL.md).
+
 ## Consumer CSS, in this order
 
 ```css

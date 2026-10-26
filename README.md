@@ -6,10 +6,11 @@ The laboratory where GuateGeeks decides, builds and proves how its products look
 - **Themes** — the GuateGeeks brand (light and dark) plus special looks such as Halloween, switched live with `data-theme` and verified for WCAG 2.2 AA contrast at build time.
 - **Variants and editions** — structural changes through extension points (Progress today), bundled with a theme, content and dates into editions such as *Halloween 2026*.
 - **Components** — accessible React components on Radix, styled only with semantic tokens.
-- **The lab** — Foundations, a Components page showing every component and state in one place (full-screen ones in phone/tablet/desktop frames), and a Theme studio that exports `theme.json`.
+- **3D** — the cotizador's papercraft engine ported to TypeScript: a render-on-demand stage with adaptive quality, an orbit camera, the papercraft kit, Geeky in 3D and the living campus, all following each theme's 3D profile.
+- **The lab** — Foundations, a Components page showing every component and state in one place (full-screen ones in phone/tablet/desktop frames), a Theme studio that exports `theme.json`, **Experiencias** (the campus: configure → live 3D → feedback) and **Kit 3D** (every papercraft piece).
 - **Agent pack** — context, skills and checklists so agents in product repos can adopt and sync the design.
 
-Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md](docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md). This repository delivers phase 1 (foundation); the 3D kit from the cotizador, more themes and editions, and product adoption follow.
+Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md](docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md). Delivered: phase 1 (foundation) and phase 2 (3D kit, campus experience, component motion). Next: more themes and editions (phase 3) and product adoption (phase 4).
 
 ## Packages
 
@@ -19,7 +20,10 @@ Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-des
 | [`@guategeeks/themes`](packages/themes) | `themes.css`, theme and edition data, `/validate` (contrast) |
 | [`@guategeeks/theme-runtime`](packages/theme-runtime) | theme/scheme/motion/edition controller; `/react` provider and hooks |
 | [`@guategeeks/motion`](packages/motion) | motion presets and semantics with theme-aware durations |
-| [`@guategeeks/ui`](packages/ui) | React components and variant slots |
+| [`@guategeeks/ui`](packages/ui) | React components, variant slots and the animated `Background` |
+| [`@guategeeks/three`](packages/three) | 3D stage, orbit camera, picking, papercraft kit, inspector; `/react` `ThreeHost` |
+| [`@guategeeks/mascot`](packages/mascot) | Geeky 3D (vendored GuateGeeks/geeky-animation) |
+| [`@guategeeks/experience-campus`](experiences/campus) | The living campus: growth plan, scene, HUD, summary (reference experience, private) |
 
 ## Develop
 
