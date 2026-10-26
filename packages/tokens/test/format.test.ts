@@ -87,6 +87,10 @@ describe('ts and native outputs', () => {
     expect(generated.tokenNames).toContain('--gg-color-action');
   });
 
+  it('generated module lists the semantic color roles', () => {
+    expect(generated.colorRoles).toEqual([...COLOR_ROLES]);
+  });
+
   it('native output', () => {
     const native = buildNativeData(light, dark);
     expect(native.light.colorAction).toBe('#ef8556');

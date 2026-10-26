@@ -147,6 +147,9 @@ export const tokenNames = [
   "--gg-layout-page-max"
 ] as const;
 export type TokenName = (typeof tokenNames)[number];
+/** Semantic color roles; components may only use these colors (as --gg-color-<role>). */
+export const colorRoles = ["bg","surface","surface-2","ink","ink-muted","ink-subtle","line","line-soft","action","on-action","action-hover","link","focus","hero","on-hero","wash","accent","ok","ok-soft","bad","bad-soft","hint","hint-soft"] as const;
+export type ColorRole = (typeof colorRoles)[number];
 export const light: Record<TokenName, string | number> = {
   "--gg-color-coral-100": "#5c2e1e",
   "--gg-color-coral-200": "#6e3019",
