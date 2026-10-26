@@ -40,7 +40,7 @@ export function AppShell({ brand, nav, actions, children, className }: AppShellP
                 )}
               >
                 <span aria-hidden>{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="whitespace-nowrap">{item.label}</span>
               </a>
             </li>
           ))}

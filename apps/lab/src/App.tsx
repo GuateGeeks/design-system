@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BookOpen, LayoutGrid, Palette, School } from 'lucide-react';
+import { BookOpen, Boxes, LayoutGrid, Palette, School } from 'lucide-react';
 import { editions, themes } from '@guategeeks/themes';
 import { ThemeProvider } from '@guategeeks/theme-runtime/react';
 import { AppShell, EmptyState, ToastProvider } from '@guategeeks/ui';
@@ -15,12 +15,14 @@ import { Toolbar } from './shell/Toolbar.tsx';
 
 // 3D sections load on demand: pages without 3D never download three.js.
 const ExperiencesPage = lazy(() => import('./sections/experiences/ExperiencesPage.tsx'));
+const Kit3dPage = lazy(() => import('./sections/kit3d/Kit3dPage.tsx'));
 
 const NAV: Array<{ id: Section; icon: React.ReactNode }> = [
   { id: 'foundations', icon: <BookOpen /> },
   { id: 'components', icon: <LayoutGrid /> },
   { id: 'studio', icon: <Palette /> },
   { id: 'experiences', icon: <School /> },
+  { id: 'kit3d', icon: <Boxes /> },
 ];
 
 export function App() {
@@ -48,6 +50,7 @@ export function App() {
               {section === 'studio' && <StudioPage />}
               <Suspense fallback={<p className="text-ink-muted">{copy.loading}</p>}>
                 {section === 'experiences' && <ExperiencesPage />}
+                {section === 'kit3d' && <Kit3dPage />}
               </Suspense>
             </div>
           </AppShell>

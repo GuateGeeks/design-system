@@ -26,7 +26,7 @@ export function Tabs({ items, value, defaultValue, onValueChange, className }: T
           <RadixTabs.Trigger
             key={t.id}
             value={t.id}
-            className="-mb-px border-b-2 border-transparent px-3 text-sm font-medium text-ink-muted min-h-(--gg-tap-min) hover:text-ink data-[state=active]:border-action data-[state=active]:text-ink"
+            className="-mb-px shrink-0 whitespace-nowrap border-b-2 border-transparent px-3 text-sm font-medium text-ink-muted min-h-(--gg-tap-min) hover:text-ink data-[state=active]:border-action data-[state=active]:text-ink"
           >
             {t.label}
           </RadixTabs.Trigger>
