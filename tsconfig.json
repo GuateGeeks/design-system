@@ -2,6 +2,7 @@
   "files": [],
   "references": [
     { "path": "packages/tokens" },
-    { "path": "packages/themes" }
+    { "path": "packages/themes" },
+    { "path": "packages/theme-runtime" }
   ]
 }
