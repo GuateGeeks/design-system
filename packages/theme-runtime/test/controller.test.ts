@@ -59,6 +59,32 @@ describe('createThemeController', () => {
     expect(c.getState()).toMatchObject({ theme: 'guategeeks', edition: null });
   });
 
+  it('choosing a theme opts out of the active edition only', () => {
+    const ada = { id: 'ada-2027', name: 'Ada 2027', theme: 'halloween', variants: {}, window: { from: '2027-10-13', to: '2027-10-15', tz: 'America/Guatemala' } };
+    const all = [...editions, ada];
+    create({ editions: all, now: inWindow }).setTheme('guategeeks');
+    controller!.destroy();
+    expect(create({ editions: all, now: inWindow }).getState().edition).toBeNull();
+    controller!.destroy();
+    expect(create({ editions: all, now: () => new Date('2027-10-14T18:00:00Z') }).getState().edition?.id).toBe('ada-2027');
+    controller!.destroy();
+    expect(create({ editions: all, now: inWindow, search: '?edition=halloween-2026' }).getState().edition?.id).toBe('halloween-2026');
+  });
+
+  it('setEdition(null) opts out of the active edition; previews still work', () => {
+    create({ now: inWindow }).setEdition(null);
+    expect(controller!.getState().edition).toBeNull();
+    controller!.destroy();
+    expect(create({ now: inWindow }).getState().edition).toBeNull();
+    controller!.destroy();
+    expect(create({ now: outside, search: '?edition=halloween-2026' }).getState().edition?.id).toBe('halloween-2026');
+  });
+
+  it('choosing a theme with no active edition stores no opt-out', () => {
+    create().setTheme('halloween');
+    expect(JSON.parse(localStorage.getItem('gg-appearance') ?? '{}').optedOut ?? []).toEqual([]);
+  });
+
   it('reduced motion', () => {
     const c = create();
     c.setMotion('reduced');

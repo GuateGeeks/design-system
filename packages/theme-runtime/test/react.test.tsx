@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { StrictMode } from 'react';
 import { act, cleanup, render, screen } from '@testing-library/react';
 import { editions, themes, type Edition } from '@guategeeks/themes';
 import { createThemeController } from '@guategeeks/theme-runtime';
@@ -66,5 +67,19 @@ describe('react bindings', () => {
     expect(media.listenerCount()).toBeGreaterThan(0);
     unmount();
     expect(media.listenerCount()).toBe(0);
+  });
+
+  it('StrictMode leaves exactly one live controller', () => {
+    render(
+      <StrictMode>
+        <ThemeProvider options={{ themes, editions, now: outside, search: '' }}><ThemeName /></ThemeProvider>
+      </StrictMode>,
+    );
+    act(() => screen.getByRole('button').click());
+    expect(document.documentElement.dataset.theme).toBe('halloween');
+    act(() => media.set('(prefers-color-scheme: dark)', true));
+    act(() => media.set('(prefers-color-scheme: dark)', false));
+    expect(document.documentElement.dataset.theme).toBe('halloween');
+    expect(media.listenerCount()).toBe(2);
   });
 });

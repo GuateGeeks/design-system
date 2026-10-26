@@ -22,7 +22,7 @@ Spec: [design spec](../docs/superpowers/specs/2026-10-25-guategeeks-design-lab-d
 | Variants | Structure/behavior through extension points a product exposes | `registerVariant(point, value, Component)` in `@guategeeks/ui` |
 | Editions | A theme + requested variants + content + date window | `packages/themes/editions/<id>.json` |
 
-Edition priority at runtime: explicit user choice > `?edition=<id>` (preview; `?edition=none` disables) > active date window (in the edition's timezone) > product default. Choosing a theme opts out of the active edition.
+Edition priority at runtime: explicit user choice > `?edition=<id>` (preview; `?edition=none` disables) > active date window (in the edition's timezone) > product default. Choosing a theme (or "no edition") opts out of the edition active at that moment only; later editions still apply and `?edition=` previews still work.
 
 ## Rules
 

@@ -19,10 +19,14 @@ export interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ controller, options, children }: ThemeProviderProps) {
-  const [owned] = useState(() => (controller ? null : createThemeController(options ?? { themes: [] })));
+  // Created detached: a render StrictMode discards leaves no listeners and never touches <html>.
+  const [owned] = useState(() => (controller ? null : createThemeController({ ...(options ?? { themes: [] }), attach: false })));
   useEffect(() => () => owned?.destroy(), [owned]);
+  const active = controller ?? owned!;
+  // Keeps the controller attached (root attributes, OS listeners) while mounted, even if no child subscribes.
+  useEffect(() => active.subscribe(() => {}), [active]);
   const value: ThemeContextValue = {
-    controller: controller ?? owned!,
+    controller: active,
     themes: options?.themes ?? [],
     editions: options?.editions ?? [],
   };

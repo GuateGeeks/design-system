@@ -28,6 +28,12 @@ export interface ThemeControllerOptions {
   search?: string;
   /** localStorage key; null disables persistence. Default 'gg-appearance'. */
   storageKey?: string | null;
+  /**
+   * Default true: apply to the root and follow OS changes immediately. With false, construction has no
+   * side effects and the first subscribe() attaches — for controllers created during a React render,
+   * which StrictMode or a discarded render may throw away.
+   */
+  attach?: boolean;
 }
 
 export interface ThemeController {
@@ -56,7 +62,8 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
   const stored = readStored(storageKey);
   const choice: StoredAppearance = {
     theme: known(stored.theme)?.id,
-    edition: stored.edition === 'none' || editions.some((e) => e.id === stored.edition) ? stored.edition : undefined,
+    edition: editions.some((e) => e.id === stored.edition) ? stored.edition : undefined,
+    optedOut: Array.isArray(stored.optedOut) ? stored.optedOut.filter((id) => typeof id === 'string') : [],
     scheme: SCHEMES.includes(stored.scheme as SchemePreference) ? stored.scheme : 'auto',
     motion: MOTIONS.includes(stored.motion as MotionPreference) ? stored.motion : 'auto',
   };
@@ -71,6 +78,7 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
       search: opts.search ?? (typeof location !== 'undefined' ? location.search : ''),
       now: opts.now?.() ?? new Date(),
       productDefault: opts.defaultEdition,
+      optedOut: choice.optedOut,
     });
     const editionTheme = edition ? known(edition.theme) : undefined;
     const theme = editionTheme ?? known(choice.theme) ?? fallbackTheme;
@@ -88,38 +96,43 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
   };
 
   let state = compute();
-  if (root) applyToRoot(root, state);
+  let attached = false;
 
   const update = (persist: boolean) => {
     if (persist) writeStored(storageKey, choice);
     const next = compute();
     const changed = JSON.stringify(next) !== JSON.stringify(state);
     state = next;
-    if (root) applyToRoot(root, state);
+    if (root && attached) applyToRoot(root, state);
     if (changed) for (const l of [...listeners]) l(state);
   };
+  const optOutOfActive = () => {
+    const active = state.edition?.id;
+    choice.edition = undefined;
+    if (active && !choice.optedOut?.includes(active)) choice.optedOut = [...(choice.optedOut ?? []), active];
+  };
+
   const onMediaChange = () => update(false);
-  let attached = false;
   const attach = () => {
     if (attached) return;
     darkQuery?.addEventListener('change', onMediaChange);
     reduceQuery?.addEventListener('change', onMediaChange);
     attached = true;
+    update(false);
   };
-  attach();
+  if (opts.attach !== false) attach();
 
   return {
     getState: () => state,
     subscribe(listener) {
-      attach(); // re-attaches after destroy(), e.g. a StrictMode remount
-      update(false);
+      attach(); // first subscribe of a detached controller, or re-attach after destroy() (StrictMode remount)
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
     setTheme(id) {
       if (!known(id)) return;
       choice.theme = id;
-      choice.edition = 'none'; // choosing a theme opts out of the active edition
+      optOutOfActive(); // choosing a theme opts out of the edition shown now, not of future ones
       update(true);
     },
     setScheme(preference) {
@@ -133,8 +146,13 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
       update(true);
     },
     setEdition(id) {
-      if (id !== null && !editions.some((e) => e.id === id)) return;
-      choice.edition = id ?? 'none';
+      if (id === null) {
+        optOutOfActive();
+      } else {
+        if (!editions.some((e) => e.id === id)) return;
+        choice.edition = id;
+        choice.optedOut = (choice.optedOut ?? []).filter((x) => x !== id);
+      }
       update(true);
     },
     destroy() {

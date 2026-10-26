@@ -2,7 +2,10 @@ import type { MotionPreference, SchemePreference } from './controller.ts';
 
 export interface StoredAppearance {
   theme?: string;
+  /** An explicitly chosen edition id. */
   edition?: string;
+  /** Editions the user opted out of (by choosing a theme or "no edition" while they were active). */
+  optedOut?: string[];
   scheme?: SchemePreference;
   motion?: MotionPreference;
 }

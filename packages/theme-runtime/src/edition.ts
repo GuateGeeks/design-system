@@ -7,6 +7,8 @@ export interface EditionContext {
   search?: string;
   now: Date;
   productDefault?: string | null;
+  /** Editions the user opted out of; a URL preview still shows them. */
+  optedOut?: readonly string[];
 }
 
 /** Today's date in `tz` as YYYY-MM-DD; 'en-CA' formats dates that way. */
@@ -18,7 +20,10 @@ export function isWithinWindow(window: NonNullable<Edition['window']>, now: Date
   return window.from <= today && today <= window.to;
 }
 
-/** Priority: explicit choice > URL override > active date window > product default. Unknown ids are ignored. */
+/**
+ * Priority: explicit choice > URL override > active date window > product default.
+ * Unknown ids are ignored; opted-out editions are skipped by the window and the default only.
+ */
 export function resolveEdition(editions: Edition[], ctx: EditionContext): Edition | null {
   const byId = (id: string | null | undefined) => (id ? editions.find((e) => e.id === id) : undefined);
   if (ctx.explicit === 'none') return null;
@@ -28,7 +33,8 @@ export function resolveEdition(editions: Edition[], ctx: EditionContext): Editio
   if (fromUrl === 'none') return null;
   const preview = byId(fromUrl);
   if (preview) return preview;
-  const active = editions.find((e) => e.window && isWithinWindow(e.window, ctx.now));
+  const allowed = (e: Edition | undefined) => (e && !ctx.optedOut?.includes(e.id) ? e : undefined);
+  const active = editions.find((e) => allowed(e) && e.window && isWithinWindow(e.window, ctx.now));
   if (active) return active;
-  return byId(ctx.productDefault) ?? null;
+  return allowed(byId(ctx.productDefault)) ?? null;
 }
