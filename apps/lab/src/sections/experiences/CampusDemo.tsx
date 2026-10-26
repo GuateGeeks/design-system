@@ -29,7 +29,8 @@ export function CampusDemo() {
     const apply = () => {
       const stage = el.closest('[data-gg="campus-stage"]')?.getBoundingClientRect();
       if (!stage) return;
-      const side = stage.width >= 640;
+      // HUD beside the campus when enough room remains; otherwise above it.
+      const side = stage.width - el.offsetWidth >= 260;
       engine.setInsets(side
         ? { right: el.offsetWidth + 16, bottom: feedbackEl.offsetHeight + 16 }
         : { top: el.offsetHeight + 16, bottom: feedbackEl.offsetHeight + 16 });
@@ -47,8 +48,8 @@ export function CampusDemo() {
   useEffect(() => { play(card.current, 'enter.item'); }, [feedback.title]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
-      <Card className="order-2 max-h-[70dvh] overflow-y-auto lg:order-1">
+    <div className="grid gap-6 2xl:grid-cols-[minmax(0,22rem)_1fr]">
+      <Card className="order-2 2xl:order-1 2xl:max-h-[70dvh] 2xl:overflow-y-auto">
         <CampusConfigurator ref={configurator} value={data} onChange={change} active={selection} />
       </Card>
       <CampusStage
@@ -57,7 +58,7 @@ export function CampusDemo() {
         diagnostics
         onEngine={setEngine}
         onSelect={(s) => { setSelection(s); configurator.current?.focus(s.kind, s.id); }}
-        className="order-1 h-[70dvh] min-h-[28rem] rounded-panel border border-line lg:order-2"
+        className="order-1 h-[70dvh] min-h-[28rem] rounded-panel border border-line 2xl:order-2"
       >
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between gap-3 p-3">
           <div ref={hud} className="pointer-events-auto ml-auto w-full max-w-xs">

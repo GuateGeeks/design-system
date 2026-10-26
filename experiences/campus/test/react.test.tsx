@@ -32,6 +32,16 @@ describe('CampusStage', () => {
     expect(engine.setProfile).toHaveBeenLastCalledWith(expect.objectContaining({ background: '#160f1f' }));
   });
 
+  it('exposes diagnostics and selectable targets as data attributes when asked', async () => {
+    const engine = fakeEngine();
+    engine.getDiagnostics.mockReturnValue({ triangles: 1000, drawCalls: 20, materials: 8, framePending: false, contextLost: false,
+      selectTargets: [{ kind: 'program', id: 'spike', x: 120.4, y: 80.6 }, { kind: 'level', id: 'pre', x: 10, y: 10 }] });
+    render(<ThemeProvider controller={controller()} options={{ themes, editions }}><CampusStage data={data} diagnostics createScene={() => engine} /></ThemeProvider>);
+    const stageEl = document.querySelector('[data-gg="campus-stage"]')!;
+    expect(stageEl.getAttribute('data-triangles')).toBe('1000');
+    expect(JSON.parse(stageEl.getAttribute('data-targets')!)).toEqual([{ kind: 'program', id: 'spike', x: 120, y: 81 }, { kind: 'level', id: 'pre', x: 10, y: 10 }]);
+  });
+
   it('forwards reduced motion', () => {
     const engine = fakeEngine();
     const c = controller();

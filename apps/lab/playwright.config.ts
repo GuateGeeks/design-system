@@ -8,7 +8,11 @@ export default defineConfig({
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: { baseURL: 'http://127.0.0.1:4173/', trace: 'retain-on-failure' },
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled' } },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [{
+    name: 'chromium',
+    // Software WebGL (SwiftShader) so 3D renders in headless CI.
+    use: { ...devices['Desktop Chrome'], launchOptions: { args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] } },
+  }],
   webServer: {
     command: 'npm run preview -- --port 4173 --strictPort',
     url: 'http://127.0.0.1:4173/',

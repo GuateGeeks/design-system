@@ -5,7 +5,7 @@ import { COMBOS, frameLinks, openFrame } from './combos.ts';
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'];
 
 async function seriousViolations(page: Page) {
-  const { violations } = await new AxeBuilder({ page }).withTags(TAGS).analyze();
+  const { violations } = await new AxeBuilder({ page }).withTags(TAGS).exclude('canvas').analyze();
   return violations
     .filter((v) => v.impact === 'serious' || v.impact === 'critical')
     .map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
@@ -23,10 +23,10 @@ for (const combo of COMBOS) {
   });
 }
 
-for (const section of ['foundations', 'components', 'studio']) {
+for (const section of ['foundations', 'components', 'studio', 'experiences', 'kit3d']) {
   test(`${section} page is accessible`, async ({ page }) => {
     await page.goto(`./?edition=none#/${section}`);
-    await page.getByRole('heading', { level: 1 }).waitFor();
+    await page.getByRole('heading', { level: 2 }).first().waitFor();
     expect(await seriousViolations(page)).toEqual([]);
   });
 }

@@ -78,6 +78,8 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
 
   const attrs = stats ? {
     'data-triangles': stats.triangles, 'data-draw-calls': stats.drawCalls, 'data-materials': stats.materials, 'data-frame-pending': String(stats.framePending),
+    // Screen positions of selectable buildings (client px), for labs and end-to-end tests.
+    'data-targets': JSON.stringify((stats.selectTargets ?? []).map((t) => ({ kind: t.kind, id: t.id, x: Math.round(t.x), y: Math.round(t.y) }))),
   } : {};
   return (
     <div data-gg="campus-stage" data-ready={ready} data-lost={lost} {...attrs} className={cx('gg-campus relative isolate overflow-hidden bg-bg', className)}>
