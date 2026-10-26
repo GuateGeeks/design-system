@@ -2,9 +2,9 @@
 /**
  * Geeky, the GuateGeeks guide, as the stylised 3-D character of GuateGeeks/geeky-animation.
  * The original brain (poses, gaze, blinks, actions) and the original geometry (extruded rims,
- * lens-shaped eyes, hooked temples) are mounted inside this scene through ./geeky/embedded.js:
- * one WebGL context, the campus' lights, no copied file modified.
- * Provenance and file hashes: ./geeky/PROVENANCE.md.
+ * lens-shaped eyes, hooked temples) come from @guategeeks/geeky (createGeekyModel), mounted inside
+ * this scene: one WebGL context, the campus' lights. Geeky itself changes in geeky-animation, never here.
+ * Optional `palette` (hex colours for frame, back, lid, heart, blush) is fixed at creation.
  *
  * API used by campus-scene.js: createGeeky(materials) -> { group, tick(time, dt, goal), settled, state }.
  * Geeky owns exactly two materials (ownMaterials()), whatever the pose.
@@ -17,10 +17,11 @@
  * `settled` is true and it asks for no frames. With reduced motion the pose is always static.
  */
 import { Group, type Material } from 'three';
+import { ACTIONS, ALIASES, resolveAction } from '@guategeeks/geeky/actions';
+import { createGeekyModel, type GeekyPalette } from '@guategeeks/geeky/model';
+import { GEEKY_THREE } from './three-namespace.ts';
 
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
-import { createEmbeddedGeeky } from './vendor/geeky/embedded.js';
-import { ACTIONS, resolveAction } from './vendor/geeky/live/actions.mjs';
 
 const K = .027; // character units -> world units (the same scale as the previous low-poly Geeky: lenses at +-.34)
 const REST_AFTER = 3; // seconds of calm before the pose freezes
@@ -47,10 +48,10 @@ export interface Geeky3D {
   dispose(): void;
 }
 
-export function createGeeky3D(_materials?: Record<string, unknown>, options: { reduced?: boolean } = {}): Geeky3D {
+export function createGeeky3D(_materials?: Record<string, unknown>, options: { reduced?: boolean; palette?: GeekyPalette } = {}): Geeky3D {
   const reduced = options.reduced ?? (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const embedded = createEmbeddedGeeky({ reduced });
-  const { brain, stage } = embedded;
+  const embedded = createGeekyModel({ THREE: GEEKY_THREE, reduced, palette: options.palette });
+  const { brain, group: stage } = embedded;
   stage.scale.setScalar(K);
   const group = new Group();
   group.name = 'geeky';
@@ -61,9 +62,9 @@ export function createGeeky3D(_materials?: Record<string, unknown>, options: { r
 
   function wake(seconds = REST_AFTER) { state.activeUntil = Math.max(state.activeUntil, state.clock + seconds); }
 
-  /** Play a short action. Looping actions are refused: they would never let Geeky rest. */
+  /** Play a short action. Looping actions are refused: they would never let Geeky rest; unknown ids too. */
   function cue(name?, params?) {
-    if (disposed || reduced) return false;
+    if (disposed || reduced || !Object.hasOwn(ACTIONS, ALIASES[name] ?? name)) return false;
     const def = resolveAction(name);
     if (def.loop) return false;
     brain.play(def.id, { params, restart: true });
@@ -76,7 +77,9 @@ export function createGeeky3D(_materials?: Record<string, unknown>, options: { r
     return { x: vector[0] * c + vector[2] * s, y: vector[1], z: -vector[0] * s + vector[2] * c };
   }
 
-  function lidsVisible() { return embedded.renderer.eyes.some(eye => eye.lidT.visible || eye.lidB.visible); }
+  // The renderer's eye records are internal to geeky-animation; only lid visibility is read here.
+  const eyes = (embedded.renderer as unknown as { eyes: { lidT: { visible: boolean }; lidB: { visible: boolean } }[] }).eyes;
+  function lidsVisible() { return eyes.some(eye => eye.lidT.visible || eye.lidB.visible); }
 
   function tick(t, dt, { goal, look, cameraYaw, moving, perched = false, celebrate = false }) {
     if (disposed) return;

@@ -10,10 +10,8 @@
       "default": "./dist/index.js"
     }
   },
-  "scripts": {
-    "build": "cp -r src/vendor dist/"
-  },
   "dependencies": {
+    "@guategeeks/geeky": "github:GuateGeeks/geeky-animation#feature/package",
     "three": "0.186.1"
   },
   "devDependencies": {

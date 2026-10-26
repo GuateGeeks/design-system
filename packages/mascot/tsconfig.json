@@ -7,5 +7,5 @@
     "noImplicitAny": false,
     "strictNullChecks": false
   },
-  "include": ["src/**/*.ts", "src/**/*.d.mts"]
+  "include": ["src/**/*.ts"]
 }
