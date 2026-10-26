@@ -1,6 +1,25 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "rootDir": "src", "outDir": "dist" },
-  "include": ["src"],
-  "references": [{ "path": "../tokens" }, { "path": "../themes" }, { "path": "../motion" }, { "path": "../theme-runtime" }]
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../tokens"
+    },
+    {
+      "path": "../themes"
+    },
+    {
+      "path": "../motion"
+    },
+    {
+      "path": "../theme-runtime"
+    }
+  ]
 }
