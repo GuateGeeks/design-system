@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/tokens" },
     { "path": "packages/themes" },
-    { "path": "packages/theme-runtime" }
+    { "path": "packages/theme-runtime" },
+    { "path": "packages/motion" }
   ]
 }
