@@ -7,7 +7,7 @@ import { registry } from '../src/gallery/registry.ts';
 
 const EXPECTED = [
   'button', 'icon-button', 'link', 'card', 'badge', 'glass-panel', 'empty-state', 'tabs', 'segmented-control',
-  'switch', 'text-field', 'number-stepper', 'select', 'dialog', 'tooltip', 'toast', 'app-shell', 'progress',
+  'switch', 'text-field', 'number-stepper', 'select', 'dialog', 'tooltip', 'toast', 'app-shell', 'progress', 'background',
 ];
 
 describe('gallery registry', () => {

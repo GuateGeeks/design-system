@@ -39,3 +39,48 @@
     .gg-glass { background: var(--gg-color-surface); backdrop-filter: none; }
   }
 }
+
+/* `calm:` applies when motion is reduced by the app (data-motion="reduced") or by the OS (unless the app says full). */
+@custom-variant calm {
+  &:where([data-motion="reduced"] *) { @slot; }
+  @media (prefers-reduced-motion: reduce) { &:where(:not([data-motion="full"] *)) { @slot; } }
+}
+
+@layer components {
+  .gg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(48px);
+    opacity: 0.6;
+    translate: calc(var(--gg-parallax-x, 0) * var(--gg-blob-depth) * 1px) calc(var(--gg-parallax-y, 0) * var(--gg-blob-depth) * 1px);
+    transition: translate var(--gg-duration-epic) var(--gg-easing-standard);
+    animation: gg-liquid calc(var(--gg-duration-epic) * 9) var(--gg-easing-standard) infinite alternate;
+  }
+  .gg-blob-1 {
+    width: 34rem; height: 34rem; top: -40%; right: -12%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--gg-color-action) 45%, transparent), transparent 70%);
+    --gg-blob-depth: -20;
+  }
+  .gg-blob-2 {
+    width: 28rem; height: 28rem; bottom: -45%; left: -10%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--gg-color-accent) 40%, transparent), transparent 70%);
+    --gg-blob-depth: 15;
+    animation-delay: calc(var(--gg-duration-epic) * -3);
+  }
+  .gg-blob-3 {
+    width: 22rem; height: 22rem; top: 0; left: 38%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--gg-color-hero) 35%, transparent), transparent 70%);
+    --gg-blob-depth: 10;
+    animation-delay: calc(var(--gg-duration-epic) * -6);
+  }
+  [data-motion="reduced"] .gg-blob { animation: none; transition: none; translate: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion="full"]) .gg-blob { animation: none; transition: none; translate: none; }
+  }
+}
+
+@keyframes gg-liquid {
+  0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; scale: 1; }
+  50% { border-radius: 70% 30% 46% 54% / 30% 39% 61% 70%; scale: 1.08; }
+  100% { border-radius: 60% 40% 40% 60% / 55% 60% 40% 45%; scale: 0.96; }
+}

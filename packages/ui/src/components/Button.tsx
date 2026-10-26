@@ -40,7 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       onPointerDown={(e) => { play(e.currentTarget, 'select'); onPointerDown?.(e); }}
       {...rest}
     >
-      {loading ? <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" /> : iconStart}
+      {loading ? <LoaderCircle aria-hidden className="size-4 animate-spin calm:animate-none" /> : iconStart}
       {children}
     </button>
   );

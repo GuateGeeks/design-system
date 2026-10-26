@@ -1,7 +1,7 @@
 import { button, iconButton, link } from './entries/actions.tsx';
 import { dialog, toast, tooltip } from './entries/overlays.tsx';
 import { numberStepper, segmentedControl, select, switchEntry, tabs, textField } from './entries/forms.tsx';
-import { appShell, progress } from './entries/layout.tsx';
+import { appShell, background, progress } from './entries/layout.tsx';
 import { badge, card, emptyState, glassPanel } from './entries/surfaces.tsx';
 import type { GalleryEntry, GalleryState, GroupId } from './types.ts';
 
@@ -20,7 +20,7 @@ export const GROUPS: ReadonlyArray<{ id: GroupId; label: string }> = [
 export const registry: GalleryEntry[] = [
   button, iconButton, link, card, badge, glassPanel, emptyState,
   tabs, segmentedControl, switchEntry, textField, numberStepper, select,
-  dialog, tooltip, toast, appShell, progress,
+  dialog, tooltip, toast, appShell, progress, background,
 ];
 
 export function findEntry(id: string): GalleryEntry | undefined {

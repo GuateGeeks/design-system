@@ -33,9 +33,11 @@ describe('frame route', () => {
     try {
       window.location.hash = '#/frame/button/default?theme=guategeeks';
       const { unmount } = render(<App />);
+      const oneFrame = media.listenerCount();
+      expect(oneFrame).toBeGreaterThan(0);
       go('#/frame/badge/default?theme=halloween');
       go('#/frame/card/default?theme=guategeeks');
-      expect(media.listenerCount()).toBe(2);
+      expect(media.listenerCount()).toBe(oneFrame);
       unmount();
       expect(media.listenerCount()).toBe(0);
     } finally {

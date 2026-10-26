@@ -1,5 +1,5 @@
 import { BookOpen, Home, Trophy, User } from 'lucide-react';
-import { AppShell, Badge, Progress } from '@guategeeks/ui';
+import { AppShell, Badge, Button, GradientBlobs, Progress } from '@guategeeks/ui';
 import type { GalleryEntry } from '../types.ts';
 
 export const appShell: GalleryEntry = {
@@ -32,6 +32,25 @@ export const appShell: GalleryEntry = {
         </div>
       ),
     },
+  ],
+};
+
+const hero = (
+  <div className="flex min-h-64 flex-col justify-center gap-3 p-8">
+    <h2 className="text-3xl">Aprender haciendo</h2>
+    <p className="max-w-md text-ink-muted">Robótica, programación y tecnología para tu escuela.</p>
+    <Button className="w-fit">Conocer los programas</Button>
+  </div>
+);
+
+export const background: GalleryEntry = {
+  id: 'background',
+  name: 'Background',
+  group: 'structure',
+  description: 'Punto de extensión de fondo: plano o manchas de color que se mueven con el puntero (estáticas con movimiento reducido).',
+  states: [
+    { id: 'gradient-blobs', label: 'Manchas', render: () => <GradientBlobs className="-m-6 rounded-panel">{hero}</GradientBlobs> },
+    { id: 'flat', label: 'Plano', render: () => <div className="-m-6 rounded-panel bg-bg">{hero}</div> },
   ],
 };
 

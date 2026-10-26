@@ -25,8 +25,11 @@ export function Dialog({ open, defaultOpen, onOpenChange, title, description, tr
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
   const isOpen = open ?? internalOpen;
   const content = useRef<HTMLDivElement>(null);
+  const overlay = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (isOpen) play(content.current, presentation === 'sheet' ? 'sheetUp' : 'popIn');
+    if (!isOpen) return;
+    play(overlay.current, 'fadeIn');
+    play(content.current, presentation === 'sheet' ? 'sheetUp' : 'popIn');
   }, [isOpen, presentation]);
   const change = (next: boolean) => {
     setInternalOpen(next);
@@ -36,7 +39,7 @@ export function Dialog({ open, defaultOpen, onOpenChange, title, description, tr
     <RadixDialog.Root open={isOpen} onOpenChange={change}>
       {trigger && <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>}
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className="fixed inset-0 z-(--gg-z-modal) bg-ink/40" />
+        <RadixDialog.Overlay ref={overlay} className="fixed inset-0 z-(--gg-z-modal) bg-ink/40" />
         <RadixDialog.Content
           ref={content}
           data-gg="dialog"

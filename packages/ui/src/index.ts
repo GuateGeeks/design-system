@@ -19,3 +19,4 @@ export { useMediaQuery } from './hooks/useMediaQuery.ts';
 export { AppShell, type AppShellProps, type AppShellNavItem } from './components/AppShell.tsx';
 export { Progress, type ProgressProps } from './components/Progress.tsx';
 export { registerVariant, getVariants, VariantSlot, type VariantSlotProps } from './variants.tsx';
+export { Background, GradientBlobs, type BackgroundProps } from './components/Background.tsx';

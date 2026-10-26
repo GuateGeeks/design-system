@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BookOpen, Boxes, LayoutGrid, Palette, School } from 'lucide-react';
 import { editions, themes } from '@guategeeks/themes';
 import { ThemeProvider } from '@guategeeks/theme-runtime/react';
-import { AppShell, EmptyState, ToastProvider } from '@guategeeks/ui';
+import { AppShell, Background, EmptyState, ToastProvider } from '@guategeeks/ui';
 import { copy } from './copy.ts';
 import { FrameRoute } from './frame/FrameRoute.tsx';
 import { FramesIndex } from './frame/FramesIndex.tsx';
@@ -39,10 +39,12 @@ export function App() {
             nav={NAV.map((n) => ({ id: n.id, label: copy.nav[n.id], icon: n.icon, href: `#/${n.id}`, current: section === n.id }))}
           >
             <div className="mx-auto flex max-w-(--gg-layout-page-max) flex-col gap-8 px-4 py-6 lg:px-8">
-              <header className="flex flex-col gap-4 border-b border-line pb-6">
-                <h1 className="text-3xl">{copy.title}</h1>
-                <Toolbar />
-              </header>
+              <Background fallback="gradient-blobs" className="-mx-4 -mt-6 rounded-b-panel px-4 pt-6 lg:-mx-8 lg:px-8">
+                <header className="flex flex-col gap-4 border-b border-line pb-6">
+                  <h1 className="text-3xl">{copy.title}</h1>
+                  <Toolbar />
+                </header>
+              </Background>
               {'frames' in route && <FramesIndex />}
               {'notFound' in route && <EmptyState title={copy.notFound} />}
               {section === 'foundations' && <FoundationsPage />}

@@ -1,4 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { play } from '@guategeeks/motion';
+import { useMediaQuery } from '../hooks/useMediaQuery.ts';
 import { Toast as RadixToast } from 'radix-ui';
 import { X } from 'lucide-react';
 import { cx } from '../cx.ts';
@@ -17,6 +19,7 @@ const tones: Record<ToastTone, string> = {
 
 export function ToastProvider({ children }: { children?: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const wide = useMediaQuery('(min-width: 640px)');
   const show = useCallback((toast: ToastInput) => setToasts((all) => [...all, { ...toast, id: Date.now() + all.length }]), []);
   const remove = (id: number) => setToasts((all) => all.filter((t) => t.id !== id));
   const api = useMemo(() => ({ show }), [show]);
@@ -27,6 +30,7 @@ export function ToastProvider({ children }: { children?: ReactNode }) {
         {toasts.map((t) => (
           <RadixToast.Root
             key={t.id}
+            ref={(el) => { if (el && !el.dataset.entered) { el.dataset.entered = 'true'; play(el, wide ? 'slideInRight' : 'popIn'); } }}
             data-gg="toast"
             data-tone={t.tone ?? 'neutral'}
             type={t.tone === 'bad' ? 'foreground' : 'background'}
