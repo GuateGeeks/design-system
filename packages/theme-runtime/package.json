@@ -8,9 +8,17 @@
       "source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./react": {
+      "source": "./src/react/index.ts",
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
     }
   },
   "dependencies": {
     "@guategeeks/themes": "0.1.0"
+  },
+  "peerDependencies": {
+    "react": "19.3.1"
   }
 }

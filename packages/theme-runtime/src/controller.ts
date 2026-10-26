@@ -99,12 +99,20 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
     if (changed) for (const l of [...listeners]) l(state);
   };
   const onMediaChange = () => update(false);
-  darkQuery?.addEventListener('change', onMediaChange);
-  reduceQuery?.addEventListener('change', onMediaChange);
+  let attached = false;
+  const attach = () => {
+    if (attached) return;
+    darkQuery?.addEventListener('change', onMediaChange);
+    reduceQuery?.addEventListener('change', onMediaChange);
+    attached = true;
+  };
+  attach();
 
   return {
     getState: () => state,
     subscribe(listener) {
+      attach(); // re-attaches after destroy(), e.g. a StrictMode remount
+      update(false);
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
@@ -132,6 +140,7 @@ export function createThemeController(opts: ThemeControllerOptions): ThemeContro
     destroy() {
       darkQuery?.removeEventListener('change', onMediaChange);
       reduceQuery?.removeEventListener('change', onMediaChange);
+      attached = false;
       listeners.clear();
     },
   };

@@ -105,6 +105,16 @@ describe('createThemeController', () => {
     expect(localStorage.length).toBe(0);
   });
 
+  it('subscribing after destroy re-attaches (StrictMode remount)', () => {
+    const c = create();
+    c.destroy();
+    const listener = vi.fn();
+    c.subscribe(listener);
+    media.set('(prefers-color-scheme: dark)', true);
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(html().dataset.scheme).toBe('dark');
+  });
+
   it('destroy removes listeners', () => {
     const c = create();
     const listener = vi.fn();
