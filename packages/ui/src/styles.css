@@ -1,0 +1,41 @@
+/*
+ * @guategeeks/ui styles. Consumers import, in order:
+ *   @import "tailwindcss";
+ *   @import "@guategeeks/ui/styles.css";
+ *   @import "@guategeeks/ui/fonts.css";
+ *   @import "@guategeeks/themes/themes.css";
+ */
+@import "@guategeeks/tokens/tokens.css";
+@import "@guategeeks/tokens/tailwind.css";
+@source "./";
+
+@layer base {
+  html {
+    font-family: var(--gg-font-ui);
+    line-height: var(--gg-leading-body);
+    letter-spacing: var(--gg-tracking-body);
+    background: var(--gg-color-bg);
+    color: var(--gg-color-ink);
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--gg-font-display);
+    font-weight: var(--gg-weight-medium);
+    letter-spacing: var(--gg-tracking-heading);
+    line-height: var(--gg-leading-tight);
+  }
+  :focus-visible {
+    outline: 2px solid var(--gg-color-focus);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .gg-glass {
+    background: color-mix(in srgb, var(--gg-color-surface) 82%, transparent);
+    backdrop-filter: blur(16px) saturate(1.4);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .gg-glass { background: var(--gg-color-surface); backdrop-filter: none; }
+  }
+}
