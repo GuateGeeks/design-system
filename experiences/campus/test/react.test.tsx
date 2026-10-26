@@ -73,6 +73,22 @@ describe('CampusHud', () => {
     expect(screen.getByText('Estudiantes atendidos')).toBeTruthy();
     expect(screen.getByText('Equipos')).toBeTruthy();
   });
+
+  it('collapses to the tools on small screens and expands on demand', async () => {
+    const user = userEvent.setup();
+    const engine = fakeEngine();
+    render(<CampusHud engine={engine} data={data} paused={false} onPausedChange={() => {}} defaultExpanded={false} />);
+    expect(screen.queryByText('Estudiantes atendidos')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Girar a la izquierda' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Mostrar detalles' }));
+    expect(screen.getByText('Estudiantes atendidos')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Ocultar detalles' }).getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('unknown equipment units read as pending, not zero', () => {
+    render(<CampusHud engine={null} data={data} paused={false} onPausedChange={() => {}} />);
+    expect(screen.getByText('Equipos').nextElementSibling?.textContent).toBe('Por definir');
+  });
 });
 
 describe('CampusSummary', () => {

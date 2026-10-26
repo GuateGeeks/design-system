@@ -1,4 +1,5 @@
-import { BookOpen, LayoutGrid, Palette } from 'lucide-react';
+import { lazy, Suspense } from 'react';
+import { BookOpen, LayoutGrid, Palette, School } from 'lucide-react';
 import { editions, themes } from '@guategeeks/themes';
 import { ThemeProvider } from '@guategeeks/theme-runtime/react';
 import { AppShell, EmptyState, ToastProvider } from '@guategeeks/ui';
@@ -12,10 +13,14 @@ import { StudioPage } from './sections/studio/StudioPage.tsx';
 import { LabProvider } from './shell/LabContext.tsx';
 import { Toolbar } from './shell/Toolbar.tsx';
 
+// 3D sections load on demand: pages without 3D never download three.js.
+const ExperiencesPage = lazy(() => import('./sections/experiences/ExperiencesPage.tsx'));
+
 const NAV: Array<{ id: Section; icon: React.ReactNode }> = [
   { id: 'foundations', icon: <BookOpen /> },
   { id: 'components', icon: <LayoutGrid /> },
   { id: 'studio', icon: <Palette /> },
+  { id: 'experiences', icon: <School /> },
 ];
 
 export function App() {
@@ -41,6 +46,9 @@ export function App() {
               {section === 'foundations' && <FoundationsPage />}
               {section === 'components' && <ComponentsPage id={'section' in route ? route.id : undefined} />}
               {section === 'studio' && <StudioPage />}
+              <Suspense fallback={<p className="text-ink-muted">{copy.loading}</p>}>
+                {section === 'experiences' && <ExperiencesPage />}
+              </Suspense>
             </div>
           </AppShell>
         </LabProvider>

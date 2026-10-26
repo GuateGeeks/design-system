@@ -2,5 +2,6 @@
 @import "@guategeeks/ui/styles.css";
 @import "@guategeeks/ui/fonts.css";
 @import "@guategeeks/themes/themes.css";
+@import "@guategeeks/experience-campus/styles.css";
 
 body { margin: 0; }

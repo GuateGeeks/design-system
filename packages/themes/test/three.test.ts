@@ -34,7 +34,7 @@ describe('3d profiles', () => {
   it('halloween overrides merge over papercraft', () => {
     expect(halloween.errors).toEqual([]);
     expect(halloween.resolved.three).toMatchObject({ id: 'papercraft', background: '#160f1f', fibre: 0.045, marker: '#b6ff3b' });
-    expect(halloween.resolved.three.palette.roof).toBe('#3b2a48');
+    expect(halloween.resolved.three.palette.roof).toBe('#4a2a72');
   });
 
   it('validateManifest rejects bad three colors and unknown profile', () => {

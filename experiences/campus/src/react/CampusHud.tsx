@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Pause, Play, RefreshCcw, RotateCcw, RotateCw, ZoomIn, ZoomOut } from 'lucide-react';
+import { ChevronDown, ChevronUp, Crosshair, Pause, Play, RefreshCcw, RotateCcw, RotateCw, ZoomIn, ZoomOut } from 'lucide-react';
 import type { ThreeProfile } from '@guategeeks/themes';
 import { PAL } from '@guategeeks/three';
 import { cx, GlassPanel, IconButton, SegmentedControl, Tooltip } from '@guategeeks/ui';
@@ -21,6 +21,8 @@ export interface CampusHudProps {
   paused: boolean;
   onPausedChange(paused: boolean): void;
   profile?: ThreeProfile;
+  /** Counters, views and legend visible at first (collapse on small screens). Default true. */
+  defaultExpanded?: boolean;
   className?: string;
 }
 
@@ -29,23 +31,34 @@ function Tool({ label, icon, onClick, disabled }: { label: string; icon: React.R
 }
 
 /** Glass HUD over the campus: proposal counters, camera tools, named views and the legend. */
-export function CampusHud({ engine, data, paused, onPausedChange, profile, className }: CampusHudProps) {
+export function CampusHud({ engine, data, paused, onPausedChange, profile, defaultExpanded = true, className }: CampusHudProps) {
   const [view, setView] = useState<Exclude<CampusView, 'program'>>('overview');
   const [legend, setLegend] = useState(false);
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const counts = campusCounts(data);
+  const unitsPending = data.equipment.length > 0 && data.equipment.every((e) => e.units == null);
   const off = !engine;
   const swatch = (key: string) => profile?.palette[key] ?? PAL[key];
   return (
     <GlassPanel data-gg="campus-hud" className={cx('flex flex-col gap-3 p-4', className)}>
-      <h3 className="text-lg">Mi propuesta</h3>
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-        {([['Estudiantes atendidos', counts.attended], ['Participaciones', counts.participations], ['Simultáneos', counts.simultaneous], ['Equipos', counts.teams]] as const).map(([label, value]) => (
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-lg">Mi propuesta</h3>
+        <IconButton
+          label={expanded ? 'Ocultar detalles' : 'Mostrar detalles'}
+          aria-expanded={expanded}
+          icon={expanded ? <ChevronUp /> : <ChevronDown />}
+          onClick={() => setExpanded((v) => !v)}
+          className="-mr-2"
+        />
+      </div>
+      {expanded && <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        {([['Estudiantes atendidos', counts.attended], ['Participaciones', counts.participations], ['Simultáneos', counts.simultaneous], ['Equipos', unitsPending ? null : counts.teams]] as const).map(([label, value]) => (
           <div key={label} className="flex flex-col">
             <dt className="text-xs text-ink-muted">{label}</dt>
-            <dd className="text-xl font-medium tabular-nums">{value.toLocaleString('es-GT')}</dd>
+            <dd className={value == null ? 'text-md font-medium text-ink-muted' : 'text-xl font-medium tabular-nums'}>{value == null ? 'Por definir' : value.toLocaleString('es-GT')}</dd>
           </div>
         ))}
-      </dl>
+      </dl>}
       <div className="flex flex-wrap items-center gap-1" role="toolbar" aria-label="Cámara">
         <Tool label="Programa activo" icon={<Crosshair />} onClick={() => engine?.setView('program')} disabled={off} />
         <Tool label="Girar a la izquierda" icon={<RotateCcw />} onClick={() => engine?.rotate(-0.25)} disabled={off} />
@@ -55,6 +68,7 @@ export function CampusHud({ engine, data, paused, onPausedChange, profile, class
         <Tool label="Restablecer vista" icon={<RefreshCcw />} onClick={() => { setView('overview'); engine?.resetView(); }} disabled={off} />
         <Tool label={paused ? 'Reanudar animación' : 'Pausar animación'} icon={paused ? <Play /> : <Pause />} onClick={() => onPausedChange(!paused)} disabled={off} />
       </div>
+      {expanded && <>
       <SegmentedControl<Exclude<CampusView, 'program'>>
         label="Vista"
         value={view}
@@ -75,6 +89,7 @@ export function CampusHud({ engine, data, paused, onPausedChange, profile, class
           ))}
         </ul>
       )}
+      </>}
     </GlassPanel>
   );
 }

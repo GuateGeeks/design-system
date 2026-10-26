@@ -1,7 +1,8 @@
 /** Spanish UI copy for the lab. */
 export const copy = {
   title: 'Laboratorio de diseño GuateGeeks',
-  nav: { foundations: 'Fundamentos', components: 'Componentes', studio: 'Estudio de temas' },
+  nav: { foundations: 'Fundamentos', components: 'Componentes', studio: 'Estudio de temas', experiences: 'Experiencias', kit3d: 'Kit 3D' },
+  loading: 'Cargando…',
   toolbar: {
     label: 'Apariencia',
     theme: 'Tema',
