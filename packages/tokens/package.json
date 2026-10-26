@@ -4,11 +4,27 @@
   "private": true,
   "type": "module",
   "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./native": {
+      "source": "./src/native.ts",
+      "types": "./dist/native.d.ts",
+      "default": "./dist/native.js"
+    },
     "./build": {
       "source": "./src/build/index.ts",
       "types": "./dist/build/index.d.ts",
       "default": "./dist/build/index.js"
-    }
+    },
+    "./tokens.css": "./dist/css/tokens.css",
+    "./tailwind.css": "./dist/css/tailwind.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "generate": "node --conditions=source src/build/cli.ts"
   },
   "dependencies": {
     "style-dictionary": "5.7.1"
