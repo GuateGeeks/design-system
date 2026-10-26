@@ -19,7 +19,8 @@
     "test": "npm run generate && vitest run",
     "typecheck": "tsc -b",
     "e2e": "npm run e2e -w @guategeeks/lab",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "geeky:update": "node scripts/update-geeky.mjs"
   },
   "engines": {
     "node": ">=22.18"

@@ -22,7 +22,7 @@ Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-des
 | [`@guategeeks/motion`](packages/motion) | motion presets and semantics with theme-aware durations |
 | [`@guategeeks/ui`](packages/ui) | React components, variant slots and the animated `Background` |
 | [`@guategeeks/three`](packages/three) | 3D stage, orbit camera, picking, papercraft kit, inspector; `/react` `ThreeHost` |
-| [`@guategeeks/mascot`](packages/mascot) | Geeky 3D (vendored GuateGeeks/geeky-animation) |
+| [`@guategeeks/mascot`](packages/mascot) | Geeky 3D, from [GuateGeeks/geeky-animation](https://github.com/GuateGeeks/geeky-animation) (`@guategeeks/geeky`, pinned by tag) |
 | [`@guategeeks/experience-campus`](experiences/campus) | The living campus: growth plan, scene, HUD, summary (reference experience, private) |
 
 ## Develop
@@ -62,6 +62,8 @@ Then ask the agent to adopt the GuateGeeks design system; the `adopt-guategeeks-
 Changes to `packages/*` carry a changeset (`npm run changeset`). All `@guategeeks/*` packages share one version. Packages remain private until the registry is chosen.
 
 The lab deploys to GitHub Pages from `main` (Settings → Pages → Source: GitHub Actions).
+
+Geeky is made in GuateGeeks/geeky-animation. Each of its releases opens a pull request here (`.github/workflows/update-geeky.yml`, also weekly and on demand) that pins the new tag, runs the unit, end-to-end and visual suites and flags changed baselines. To update by hand: `npm run geeky:update -- <version>`. See [packages/mascot](packages/mascot/README.md).
 
 ## License
 

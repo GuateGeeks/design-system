@@ -45,7 +45,7 @@ Edition priority at runtime: explicit user choice > `?edition=<id>` (preview; `?
 
 ## 3D
 
-3D lives in `@guategeeks/three` (stage, orbit camera, papercraft kit, `ThreeHost`), `@guategeeks/mascot` (Geeky 3D) and `@guategeeks/experience-campus` (the cotizador campus). Every theme has a 3D profile (`ResolvedTheme.three`: background, lights, paper grain, palette); scenes render on demand, respect reduced motion, stay within budgets and always ship a text alternative. See the [build-3d-experience skill](skills/build-3d-experience/SKILL.md).
+3D lives in `@guategeeks/three` (stage, orbit camera, papercraft kit, `ThreeHost`), `@guategeeks/mascot` (Geeky 3D, sourced from GuateGeeks/geeky-animation by release tag) and `@guategeeks/experience-campus` (the cotizador campus). Every theme has a 3D profile (`ResolvedTheme.three`: background, lights, paper grain, palette); scenes render on demand, respect reduced motion, stay within budgets and always ship a text alternative. See the [build-3d-experience skill](skills/build-3d-experience/SKILL.md).
 
 ## Consumer CSS, in this order
 

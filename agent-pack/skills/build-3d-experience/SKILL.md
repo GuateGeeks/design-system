@@ -10,7 +10,7 @@ Read [CONTEXT.md](../../CONTEXT.md) first. 3D lives in its own packages, so prod
 | Package | Use |
 |---|---|
 | `@guategeeks/three` | `createStage` (renderer, lights, render-on-demand loop, adaptive quality, lifecycle), `createOrbit` (drag, wheel, pinch, tap), `pickAt`, the papercraft kit (`createBuilder`, `paperKit`, `paperMaterials`, `CATALOG`, people), `withPalette`, `createInspector`; `/react`: `ThreeHost` |
-| `@guategeeks/mascot` | `createGeeky3D(materials, { reduced })` — Geeky inside your scene |
+| `@guategeeks/mascot` | `createGeeky3D(materials, { reduced, palette })` — Geeky inside your scene (Geeky itself comes from GuateGeeks/geeky-animation; never copy its files into a product) |
 | `@guategeeks/experience-campus` | `createCampusScene` (the cotizador campus), `planCampus`, `campusCounts`, `describeCampusChange`; `/react`: `CampusStage`, `CampusHud`, `CampusSummary`; `/styles.css` |
 
 ## Rules
