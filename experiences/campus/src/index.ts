@@ -13,3 +13,4 @@ export { buildWorkshop, buildPopulation } from './actors.ts';
 export { buildRoom, buildWorkshopShell, buildStorage, buildCirculation, buildEnvironment } from './architecture.ts';
 export * from './scene.ts';
 export { xrayBlockers } from './xray.ts';
+export * from './counts.ts';

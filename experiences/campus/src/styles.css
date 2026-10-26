@@ -1,0 +1,19 @@
+/* @guategeeks/experience-campus styles: import after @guategeeks/ui/styles.css. */
+@source "./";
+
+.gg-campus .gg-campus-canvas { width: 100%; height: 100%; }
+.gg-campus .gg-campus-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  white-space: nowrap;
+  border-radius: var(--gg-radius-pill);
+  border: 1px solid var(--gg-color-line);
+  background: color-mix(in srgb, var(--gg-color-surface) 88%, transparent);
+  color: var(--gg-color-ink);
+  font: 500 var(--gg-size-xs) / 1.2 var(--gg-font-ui);
+  padding: 4px 10px;
+  box-shadow: var(--gg-shadow-float);
+}

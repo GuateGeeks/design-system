@@ -13,15 +13,30 @@
       "source": "./src/feedback.ts",
       "types": "./dist/feedback.d.ts",
       "default": "./dist/feedback.js"
-    }
+    },
+    "./react": {
+      "source": "./src/react/index.ts",
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
   },
   "dependencies": {
     "@guategeeks/mascot": "0.1.0",
     "@guategeeks/themes": "0.1.0",
     "@guategeeks/three": "0.1.0",
-    "three": "0.186.1"
+    "three": "0.186.1",
+    "@guategeeks/ui": "0.1.0",
+    "@guategeeks/theme-runtime": "0.1.0",
+    "lucide-react": "1.61.0"
   },
   "devDependencies": {
     "@types/three": "0.186.0"
+  },
+  "peerDependencies": {
+    "react": "19.3.1"
+  },
+  "scripts": {
+    "build": "cp src/styles.css dist/styles.css"
   }
 }

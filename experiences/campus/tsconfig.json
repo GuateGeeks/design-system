@@ -7,6 +7,24 @@
     "noImplicitAny": false,
     "strictNullChecks": false
   },
-  "include": ["src"],
-  "references": [{ "path": "../../packages/themes" }, { "path": "../../packages/three" }, { "path": "../../packages/mascot" }]
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../packages/themes"
+    },
+    {
+      "path": "../../packages/three"
+    },
+    {
+      "path": "../../packages/mascot"
+    },
+    {
+      "path": "../../packages/ui"
+    },
+    {
+      "path": "../../packages/theme-runtime"
+    }
+  ]
 }
