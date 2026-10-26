@@ -6,3 +6,8 @@ export {
 export * from './plan-fixtures.ts';
 export { describe as describeCampusChange, programs as CAMPUS_PROGRAMS } from './feedback.ts';
 export type * from './types.ts';
+export { composeCampus } from './compose.ts';
+export { groupPlan, entitySignature, buildEntityGroup, selectionOf } from './entities.ts';
+export { RUN, walkerWorld, tickActors } from './activity.ts';
+export { buildWorkshop, buildPopulation } from './actors.ts';
+export { buildRoom, buildWorkshopShell, buildStorage, buildCirculation, buildEnvironment } from './architecture.ts';
