@@ -8,6 +8,9 @@
     "packages/theme-runtime",
     "packages/motion",
     "packages/ui",
+    "packages/mascot",
+    "packages/three",
+    "experiences/campus",
     "apps/lab"
   ],
   "scripts": {

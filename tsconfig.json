@@ -1,10 +1,23 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/tokens" },
-    { "path": "packages/themes" },
-    { "path": "packages/theme-runtime" },
-    { "path": "packages/motion" },
-    { "path": "packages/ui" }
+    {
+      "path": "packages/tokens"
+    },
+    {
+      "path": "packages/themes"
+    },
+    {
+      "path": "packages/theme-runtime"
+    },
+    {
+      "path": "packages/motion"
+    },
+    {
+      "path": "packages/ui"
+    },
+    {
+      "path": "packages/three"
+    }
   ]
 }
