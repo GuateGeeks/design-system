@@ -1,0 +1,34 @@
+{
+  "shadow": {
+    "subtle": {
+      "$type": "other",
+      "$value": "0 1px 2px 0 rgb(30 34 51 / 0.05)"
+    },
+    "float": {
+      "$type": "other",
+      "$value": "0 12px 32px rgb(30 34 51 / 0.16)"
+    }
+  },
+  "z": {
+    "base": {
+      "$type": "number",
+      "$value": 0
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 10
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 40
+    },
+    "modal": {
+      "$type": "number",
+      "$value": 50
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 60
+    }
+  }
+}

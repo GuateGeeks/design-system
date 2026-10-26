@@ -1,0 +1,96 @@
+{
+  "color": {
+    "bg": {
+      "$type": "color",
+      "$value": "{color.white}"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "{color.white}"
+    },
+    "surface-2": {
+      "$type": "color",
+      "$value": "#f3f4f6"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "{color.neutral.900}"
+    },
+    "ink-muted": {
+      "$type": "color",
+      "$value": "{color.neutral.600}"
+    },
+    "ink-subtle": {
+      "$type": "color",
+      "$value": "#5b6474"
+    },
+    "line": {
+      "$type": "color",
+      "$value": "{color.neutral.200}"
+    },
+    "line-soft": {
+      "$type": "color",
+      "$value": "{color.neutral.100}"
+    },
+    "action": {
+      "$type": "color",
+      "$value": "{color.coral.500}"
+    },
+    "on-action": {
+      "$type": "color",
+      "$value": "{color.ink}"
+    },
+    "action-hover": {
+      "$type": "color",
+      "$value": "{color.coral.600}"
+    },
+    "link": {
+      "$type": "color",
+      "$value": "{color.coral.300}"
+    },
+    "focus": {
+      "$type": "color",
+      "$value": "{color.coral.300}"
+    },
+    "hero": {
+      "$type": "color",
+      "$value": "{color.plum.400}"
+    },
+    "on-hero": {
+      "$type": "color",
+      "$value": "{color.white}"
+    },
+    "wash": {
+      "$type": "color",
+      "$value": "{color.coral.900}"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.sky.500}"
+    },
+    "ok": {
+      "$type": "color",
+      "$value": "{color.success.300}"
+    },
+    "ok-soft": {
+      "$type": "color",
+      "$value": "{color.success.900}"
+    },
+    "bad": {
+      "$type": "color",
+      "$value": "{color.error.300}"
+    },
+    "bad-soft": {
+      "$type": "color",
+      "$value": "{color.error.900}"
+    },
+    "hint": {
+      "$type": "color",
+      "$value": "{color.plum.400}"
+    },
+    "hint-soft": {
+      "$type": "color",
+      "$value": "{color.plum.900}"
+    }
+  }
+}

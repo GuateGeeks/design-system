@@ -1,0 +1,28 @@
+{
+  "name": "guategeeks-design-lab",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/tokens",
+    "packages/themes",
+    "packages/theme-runtime",
+    "packages/motion",
+    "packages/ui",
+    "apps/lab"
+  ],
+  "scripts": {
+    "generate": "npm run generate --workspaces --if-present",
+    "build": "npm run generate && tsc -b && npm run build --workspaces --if-present",
+    "test": "npm run generate && vitest run",
+    "typecheck": "tsc -b",
+    "e2e": "npm run e2e -w @guategeeks/lab"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.1",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

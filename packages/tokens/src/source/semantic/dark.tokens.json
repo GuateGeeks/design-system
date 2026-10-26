@@ -1,0 +1,96 @@
+{
+  "color": {
+    "bg": {
+      "$type": "color",
+      "$value": "#121722"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "#1b2230"
+    },
+    "surface-2": {
+      "$type": "color",
+      "$value": "#232c3d"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "#f3f5f9"
+    },
+    "ink-muted": {
+      "$type": "color",
+      "$value": "#c3cad8"
+    },
+    "ink-subtle": {
+      "$type": "color",
+      "$value": "#a1abc0"
+    },
+    "line": {
+      "$type": "color",
+      "$value": "#313c52"
+    },
+    "line-soft": {
+      "$type": "color",
+      "$value": "#293347"
+    },
+    "action": {
+      "$type": "color",
+      "$value": "{color.coral.500}"
+    },
+    "on-action": {
+      "$type": "color",
+      "$value": "{color.ink}"
+    },
+    "action-hover": {
+      "$type": "color",
+      "$value": "{color.coral.600}"
+    },
+    "link": {
+      "$type": "color",
+      "$value": "{color.coral.600}"
+    },
+    "focus": {
+      "$type": "color",
+      "$value": "{color.coral.600}"
+    },
+    "hero": {
+      "$type": "color",
+      "$value": "{color.plum.300}"
+    },
+    "on-hero": {
+      "$type": "color",
+      "$value": "{color.white}"
+    },
+    "wash": {
+      "$type": "color",
+      "$value": "{color.coral.100}"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.sky.600}"
+    },
+    "ok": {
+      "$type": "color",
+      "$value": "#65d99a"
+    },
+    "ok-soft": {
+      "$type": "color",
+      "$value": "#173a29"
+    },
+    "bad": {
+      "$type": "color",
+      "$value": "#ff9e9e"
+    },
+    "bad-soft": {
+      "$type": "color",
+      "$value": "#43201f"
+    },
+    "hint": {
+      "$type": "color",
+      "$value": "#b9aaff"
+    },
+    "hint-soft": {
+      "$type": "color",
+      "$value": "#2a2552"
+    }
+  }
+}

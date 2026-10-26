@@ -1,0 +1,61 @@
+{
+  "radius": {
+    "control": {
+      "$type": "dimension",
+      "$value": "{radius.sm}"
+    },
+    "card": {
+      "$type": "dimension",
+      "$value": "{radius.md}"
+    },
+    "panel": {
+      "$type": "dimension",
+      "$value": "{radius.lg}"
+    }
+  },
+  "font": {
+    "ui": {
+      "$type": "fontFamily",
+      "$value": "{family.inter}"
+    },
+    "display": {
+      "$type": "fontFamily",
+      "$value": "{family.inter}"
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": "{family.mono}"
+    }
+  },
+  "tap": {
+    "min": {
+      "$type": "dimension",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      }
+    }
+  },
+  "layout": {
+    "content-max": {
+      "$type": "dimension",
+      "$value": {
+        "value": 720,
+        "unit": "px"
+      }
+    },
+    "page-max": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1200,
+        "unit": "px"
+      }
+    }
+  },
+  "space": {
+    "gutter": {
+      "$type": "dimension",
+      "$value": "{space.4}"
+    }
+  }
+}

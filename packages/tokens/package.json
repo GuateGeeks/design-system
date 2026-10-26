@@ -1,0 +1,16 @@
+{
+  "name": "@guategeeks/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./build": {
+      "source": "./src/build/index.ts",
+      "types": "./dist/build/index.d.ts",
+      "default": "./dist/build/index.js"
+    }
+  },
+  "dependencies": {
+    "style-dictionary": "5.7.1"
+  }
+}

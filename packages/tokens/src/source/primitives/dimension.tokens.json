@@ -1,0 +1,197 @@
+{
+  "space": {
+    "0": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
+    "1": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$type": "dimension",
+      "$value": {
+        "value": 48,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": {
+        "value": 64,
+        "unit": "px"
+      }
+    },
+    "20": {
+      "$type": "dimension",
+      "$value": {
+        "value": 80,
+        "unit": "px"
+      }
+    },
+    "24": {
+      "$type": "dimension",
+      "$value": {
+        "value": 96,
+        "unit": "px"
+      }
+    }
+  },
+  "radius": {
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      }
+    },
+    "hero": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": {
+        "value": 999,
+        "unit": "px"
+      }
+    }
+  },
+  "size": {
+    "xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.75,
+        "unit": "rem"
+      }
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.875,
+        "unit": "rem"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1,
+        "unit": "rem"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1.25,
+        "unit": "rem"
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1.5,
+        "unit": "rem"
+      }
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "rem"
+      }
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 3,
+        "unit": "rem"
+      }
+    },
+    "display": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "rem"
+      }
+    }
+  }
+}
