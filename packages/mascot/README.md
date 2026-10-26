@@ -12,6 +12,8 @@ Geeky is made in [GuateGeeks/geeky-animation](https://github.com/GuateGeeks/geek
 
 `src/three-namespace.ts` passes Geeky only the three.js members it uses (`MODEL_THREE_KEYS`); `test/upstream.test.ts` checks that list, the installed version against the pinned tag, the palette and unknown cues.
 
+`test/geeky-signature.test.ts` records what Geeky looks like as data (meshes, vertices, colours and bounds of sampled poses) in `test/__snapshots__/geeky-signature.json`. No e2e screenshot renders Geeky, so this file is how an update shows a visible change: the update workflow rewrites it and flags the pull request when it differs; anywhere else a difference fails the tests.
+
 ## Updating Geeky
 
 A geeky-animation release opens a pull request here on its own (`.github/workflows/update-geeky.yml`: on the release's notification, weekly, or run by hand). To update by hand:
@@ -21,7 +23,7 @@ npm run geeky:update -- 1.2.0
 npm run build && npm test && npm run e2e
 ```
 
-`geeky:update` pins the new tag, reinstalls and adds a changeset. Review the release notes and any changed visual baselines before merging.
+`geeky:update` pins the new tag, reinstalls and adds a changeset. If Geeky changed, `npx vitest run --project mascot test/geeky-signature.test.ts -u` rewrites the signature; review its diff and the release notes before merging.
 
 ## Provenance
 

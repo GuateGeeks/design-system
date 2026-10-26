@@ -29,3 +29,12 @@ describe('scripts/update-geeky.mjs', () => {
     expect(text).toContain('v1.2.0');
   });
 });
+
+describe('.github/workflows/update-geeky.yml', () => {
+  it('pins third-party actions by commit SHA (one of them receives a write token)', async () => {
+    const workflow: string = (await import('../../../.github/workflows/update-geeky.yml?raw')).default;
+    const thirdParty = [...workflow.matchAll(/uses: (\S+)/g)].map((m) => m[1]).filter((ref) => !ref.startsWith('actions/'));
+    expect(thirdParty.length).toBeGreaterThan(0);
+    for (const ref of thirdParty) expect(ref).toMatch(/^[\w.-]+\/[\w.-]+@[0-9a-f]{40}$/);
+  });
+});

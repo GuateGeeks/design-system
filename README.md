@@ -63,7 +63,7 @@ Changes to `packages/*` carry a changeset (`npm run changeset`). All `@guategeek
 
 The lab deploys to GitHub Pages from `main` (Settings → Pages → Source: GitHub Actions).
 
-Geeky is made in GuateGeeks/geeky-animation. Each of its releases opens a pull request here (`.github/workflows/update-geeky.yml`, also weekly and on demand) that pins the new tag, runs the unit, end-to-end and visual suites and flags changed baselines. To update by hand: `npm run geeky:update -- <version>`. See [packages/mascot](packages/mascot/README.md).
+Geeky is made in GuateGeeks/geeky-animation. Each of its releases opens a pull request here (`.github/workflows/update-geeky.yml`, also weekly and on demand) that pins the new tag, runs the unit and end-to-end suites and flags the pull request when Geeky looks different (`packages/mascot/test/__snapshots__/geeky-signature.json`: meshes, vertices, colours and bounds of sampled poses; no screenshot renders Geeky). To update by hand: `npm run geeky:update -- <version>`. See [packages/mascot](packages/mascot/README.md).
 
 ## License
 
