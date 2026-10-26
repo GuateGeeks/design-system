@@ -1,0 +1,17 @@
+{
+  "name": "@guategeeks/themes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./validate": {
+      "source": "./src/validate.ts",
+      "types": "./dist/validate.d.ts",
+      "default": "./dist/validate.js"
+    }
+  },
+  "dependencies": {
+    "@guategeeks/tokens": "0.1.0",
+    "colorjs.io": "0.7.1"
+  }
+}
