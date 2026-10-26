@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { loadSource, resolveTokens, toMs, type ResolvedToken } from '@guategeeks/tokens/build';
 import { checkContrast } from '../contrast.ts';
+import { resolveThreeProfile } from '../three.ts';
 import type { DesignTokenTree, Edition, MotionIntensity, ResolvedTheme, SchemeName, ThemeManifest } from '../types.ts';
 import { validateManifest } from '../validate.ts';
 import { formatThemeCss } from './format.ts';
@@ -105,6 +106,7 @@ export async function buildTheme(manifest: ThemeManifest, all: ThemeManifest[]):
     defaultScheme: schemes[0] ?? 'light',
     intensity,
     ...(display ? { displayFont: { family: display.family } } : {}),
+    three: resolveThreeProfile(...lineage.map((m) => m.three)),
     values,
   };
   const build = { resolved, errors, tokens, fontImport: display?.import };

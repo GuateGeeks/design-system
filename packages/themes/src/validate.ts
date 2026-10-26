@@ -1,8 +1,10 @@
+import { THREE_COLOR_KEYS, THREE_NUMBER_KEYS, THREE_PROFILES } from './three.ts';
 import type { ThemeManifest } from './types.ts';
 
 export * from './contrast.ts';
 
 const ID = /^[a-z][a-z0-9-]*$/;
+const HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 const SCHEMES = new Set(['light', 'dark']);
 const INTENSITIES = new Set(['calm', 'standard', 'playful']);
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -31,6 +33,20 @@ export function validateManifest(input: unknown): string[] {
   const display = isObject(m.fonts) ? m.fonts.display : undefined;
   if (m.fonts !== undefined && display !== undefined && (!isObject(display) || typeof display.family !== 'string' || typeof display.import !== 'string')) {
     errors.push('fonts.display needs family and import');
+  }
+  if (m.three !== undefined) errors.push(...validateThree(m.three));
+  return errors;
+}
+
+function validateThree(three: unknown): string[] {
+  if (!isObject(three)) return ['three must be an object'];
+  const errors: string[] = [];
+  if (three.profile !== undefined && !(String(three.profile) in THREE_PROFILES)) errors.push('three.profile must be papercraft | lowpoly');
+  for (const key of THREE_COLOR_KEYS) if (three[key] !== undefined && !HEX.test(String(three[key]))) errors.push(`three.${key} must be a hex color`);
+  for (const key of THREE_NUMBER_KEYS) if (three[key] !== undefined && !(typeof three[key] === 'number' && Number.isFinite(three[key]) && (three[key] as number) >= 0)) errors.push(`three.${key} must be a non-negative number`);
+  if (three.palette !== undefined) {
+    if (!isObject(three.palette)) errors.push('three.palette must be an object');
+    else for (const [key, value] of Object.entries(three.palette)) if (!HEX.test(String(value))) errors.push(`three.palette.${key} must be a hex color`);
   }
   return errors;
 }

@@ -1,6 +1,14 @@
 {
   "id": "guategeeks",
   "name": "GuateGeeks",
-  "schemes": ["light", "dark"],
-  "motion": { "intensity": "standard" }
+  "schemes": [
+    "light",
+    "dark"
+  ],
+  "motion": {
+    "intensity": "standard"
+  },
+  "three": {
+    "profile": "papercraft"
+  }
 }

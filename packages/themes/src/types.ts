@@ -1,3 +1,6 @@
+import type { ThreeProfile, ThreeProfileInput } from './three.ts';
+
+export type { ThreeProfile, ThreeProfileId, ThreeProfileInput } from './three.ts';
 export type SchemeName = 'light' | 'dark';
 export type MotionIntensity = 'calm' | 'standard' | 'playful';
 export type DesignTokenTree = Record<string, unknown>;
@@ -12,7 +15,7 @@ export interface ThemeManifest {
   fonts?: { display?: { family: string; import: string } };
   motion?: { intensity: MotionIntensity };
   audio?: Record<string, string>;
-  three?: Record<string, unknown>;
+  three?: ThreeProfileInput;
   mascot?: { costume: string };
   assets?: Record<string, string>;
 }
@@ -24,6 +27,8 @@ export interface ResolvedTheme {
   defaultScheme: SchemeName;
   intensity: MotionIntensity;
   displayFont?: { family: string };
+  /** 3D scene profile, merged along `extends`. */
+  three: ThreeProfile;
   /** Keys are CSS custom property names, e.g. '--gg-color-action'. */
   values: Partial<Record<SchemeName, Record<string, string>>>;
 }

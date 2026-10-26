@@ -88,5 +88,30 @@
         }
       }
     }
+  },
+  "three": {
+    "profile": "papercraft",
+    "background": "#160f1f",
+    "sky": "#b9a2e8",
+    "skyGround": "#2a1838",
+    "skyIntensity": 0.9,
+    "sun": "#cfe0ff",
+    "sunIntensity": 1.4,
+    "fill": "#ff9447",
+    "fillIntensity": 0.35,
+    "ground": "#000000",
+    "groundOpacity": 0.35,
+    "marker": "#b6ff3b",
+    "preview": "#ff7a1a",
+    "palette": {
+      "lawn": "#4b3a6b",
+      "lawn2": "#43345f",
+      "lawn3": "#55447a",
+      "roof": "#3b2a48",
+      "roofLight": "#4d3a5e",
+      "orange": "#ff7a1a",
+      "bloom": "#ff7a1a",
+      "sky": "#2a1838"
+    }
   }
 }
