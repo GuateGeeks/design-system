@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BufferAttribute, Mesh } from 'three';
+import { GeekyActor } from '@guategeeks/geeky';
 import { MODEL_THREE_KEYS } from '@guategeeks/geeky/model';
 import geekyPackage from '@guategeeks/geeky/package.json' with { type: 'json' };
 import mascotPackage from '../package.json' with { type: 'json' };
@@ -12,6 +13,10 @@ const pinned = /#v(\d+\.\d+\.\d+)$/.exec(spec)?.[1] ?? null;
 describe('Geeky from GuateGeeks/geeky-animation', () => {
   it.skipIf(!pinned)('installed Geeky matches the pinned tag', () => {
     expect(geekyPackage.version).toBe(pinned);
+  });
+
+  it('the Live actor exposes what <Geeky> needs', () => {
+    for (const member of ['setFrameColor', 'setAutonomous', 'loadRenderer'] as const) expect(typeof GeekyActor.prototype[member], member).toBe('function');
   });
 
   it('GEEKY_THREE covers MODEL_THREE_KEYS', () => {

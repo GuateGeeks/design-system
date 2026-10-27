@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@guategeeks/geeky": "github:GuateGeeks/geeky-animation#v1.1.0",
+    "@guategeeks/geeky": "github:GuateGeeks/geeky-animation#feature/live-embedding",
     "three": "0.186.1"
   },
   "devDependencies": {
