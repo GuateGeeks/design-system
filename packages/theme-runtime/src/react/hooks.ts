@@ -31,6 +31,18 @@ export function useTheme(): UseThemeResult {
   };
 }
 
+const noSubscribe = () => () => {};
+const noState = () => null;
+
+/** Like useTheme, but null outside a <ThemeProvider>: for components that also work without the runtime. */
+export function useOptionalTheme(): UseThemeResult | null {
+  const ctx = useContext(ThemeContext);
+  const state = useSyncExternalStore(ctx?.controller.subscribe ?? noSubscribe, ctx?.controller.getState ?? noState, ctx?.controller.getState ?? noState);
+  if (!ctx || !state) return null;
+  const { controller, themes, editions } = ctx;
+  return { ...state, setTheme: controller.setTheme, setScheme: controller.setScheme, setMotion: controller.setMotion, setEdition: controller.setEdition, themes, editions };
+}
+
 /** The value an edition requests for an extension point, or `fallback`. */
 export function useVariant(point: string, fallback: string): string {
   return useThemeState().variants[point] ?? fallback;

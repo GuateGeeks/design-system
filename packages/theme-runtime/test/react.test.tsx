@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { act, cleanup, render, screen } from '@testing-library/react';
 import { editions, themes, type Edition } from '@guategeeks/themes';
 import { createThemeController } from '@guategeeks/theme-runtime';
-import { ThemeProvider, useEdition, useTheme, useVariant } from '@guategeeks/theme-runtime/react';
+import { ThemeProvider, useEdition, useOptionalTheme, useTheme, useVariant } from '@guategeeks/theme-runtime/react';
 import { fakeMatchMedia, type FakeMedia } from './fake-media.ts';
 
 let media: FakeMedia;
@@ -31,7 +31,24 @@ function EditionName() {
   return <span>{useEdition()?.id ?? 'none'}</span>;
 }
 
+function OptionalTheme() {
+  const state = useOptionalTheme();
+  return <span>{state ? `${state.theme}/${state.scheme}` : 'none'}</span>;
+}
+
 describe('react bindings', () => {
+  it('useOptionalTheme is null outside a provider and live inside', () => {
+    const { unmount } = render(<OptionalTheme />);
+    expect(screen.getByText('none')).toBeTruthy();
+    unmount();
+    const controller = createThemeController({ themes, now: outside, search: '' });
+    render(<ThemeProvider controller={controller}><OptionalTheme /></ThemeProvider>);
+    expect(screen.getByText('guategeeks/light')).toBeTruthy();
+    act(() => controller.setScheme('dark'));
+    expect(screen.getByText('guategeeks/dark')).toBeTruthy();
+    controller.destroy();
+  });
+
   it('useTheme re-renders on change', () => {
     render(<ThemeProvider options={{ themes, editions, now: outside, search: '' }}><ThemeName /></ThemeProvider>);
     expect(screen.getByRole('button').textContent).toBe('guategeeks');

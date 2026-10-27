@@ -7,5 +7,6 @@
     "noImplicitAny": false,
     "strictNullChecks": false
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src"],
+  "references": [{ "path": "../themes" }, { "path": "../theme-runtime" }]
 }
