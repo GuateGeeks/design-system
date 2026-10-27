@@ -1,5 +1,6 @@
-import { useEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, useSyncExternalStore, type CSSProperties } from 'react';
 import { GeekyActor } from '@guategeeks/geeky';
+import { ACTIONS } from '@guategeeks/geeky/actions';
 import { FRAME } from '@guategeeks/geeky/core';
 import { geekyPalette, getTheme, type MascotPalette } from '@guategeeks/themes';
 import { useOptionalTheme } from '@guategeeks/theme-runtime/react';
@@ -37,6 +38,18 @@ export interface GeekyProps {
 
 const loadThree = () => import('three');
 
+const REDUCE = '(prefers-reduced-motion: reduce)';
+const media = () => (typeof matchMedia === 'function' ? matchMedia(REDUCE) : null);
+const subscribeReduce = (onChange: () => void) => {
+  const m = media();
+  m?.addEventListener?.('change', onChange);
+  return () => m?.removeEventListener?.('change', onChange);
+};
+/** The OS reduced-motion setting, live (used when there is no theme runtime). */
+function useSystemReducedMotion(): boolean {
+  return useSyncExternalStore(subscribeReduce, () => !!media()?.matches, () => false);
+}
+
 /** Geeky, the GuateGeeks guide, for product screens: the geeky-animation Live actor with theme colours, motion preference and accessibility. */
 export function Geeky({
   intent, action, render = '2d', size = '8rem', interactive = false, followPointer = true, autonomous = false,
@@ -49,9 +62,10 @@ export function Geeky({
   latest.current = { onActionEnd };
 
   const theme = useOptionalTheme();
+  const systemReduced = useSystemReducedMotion();
   const resolvedTheme = theme ? (theme.themes.find((t) => t.id === theme.theme) ?? getTheme(theme.theme)) : undefined;
   const frame = palette?.frame ?? (theme ? geekyPalette(resolvedTheme, theme.scheme).frame : undefined) ?? FRAME;
-  const reduced: boolean | 'system' = reducedMotion ?? (theme ? theme.motion === 'reduced' : 'system');
+  const reduced: boolean = reducedMotion ?? (theme ? theme.motion === 'reduced' : systemReduced);
   const target = resolveGeekyAction({ intent, action });
   const looping = loops({ intent }, target.id);
 
@@ -101,7 +115,10 @@ export function Geeky({
     const holds = looping || reduced === true;
     a.setBase(holds ? id : 'idle');
     void a.play(id, { restart: true }).then((result) => {
-      if (current && result.completed && !looping) latest.current.onActionEnd?.(id);
+      if (!current || !result.completed || looping) return;
+      // Some one-shots end on a held pose (goodbye vanishes in a puff): bring Geeky back to rest.
+      if (ACTIONS[id]?.hold) void a.play('idle');
+      latest.current.onActionEnd?.(id);
     });
     return () => { current = false; };
   }, [target.id, looping, reduced, playKey, interactive, label]);

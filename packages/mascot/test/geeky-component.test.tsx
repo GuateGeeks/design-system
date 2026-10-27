@@ -93,6 +93,23 @@ describe('<Geeky>', () => {
     expect(internal(live()[0]).brain.base).toBe(GEEKY_INTENTS.celebrate.action);
   });
 
+  it('goodbye ends at rest instead of vanishing', async () => {
+    vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'setTimeout', 'clearTimeout', 'performance'] });
+    const ended = vi.fn();
+    render(<Geeky intent="goodbye" onActionEnd={ended} />);
+    await frames(400);
+    expect(ended).toHaveBeenCalledWith('goodbye');
+    expect(internal(live()[0]).brain.act.id).toBe('idle');
+  });
+
+  it('outside a provider the OS reduced-motion setting holds the intent pose', () => {
+    media.set('(prefers-reduced-motion: reduce)', true);
+    vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'setTimeout', 'clearTimeout', 'performance'] });
+    render(<Geeky intent="celebrate" />);
+    act(() => { vi.advanceTimersByTime(6000); });
+    expect(internal(live()[0]).brain.base).toBe(GEEKY_INTENTS.celebrate.action);
+  });
+
   it('paused stops the animation', () => {
     const { rerender } = render(<Geeky intent="waiting" paused />);
     expect(internal(live()[0])._paused).toBe(true);

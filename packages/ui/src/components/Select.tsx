@@ -26,7 +26,7 @@ export function Select<T extends string>({ label, options, onValueChange, placeh
           <RadixSelect.Icon><ChevronDown aria-hidden className="size-4 text-ink-muted" /></RadixSelect.Icon>
         </RadixSelect.Trigger>
         <RadixSelect.Portal>
-          <RadixSelect.Content position="popper" sideOffset={6} className="z-(--gg-z-overlay) min-w-(--radix-select-trigger-width) rounded-control border border-line bg-surface p-1 text-ink shadow-float">
+          <RadixSelect.Content position="popper" sideOffset={6} className="z-(--gg-z-overlay) max-h-(--radix-select-content-available-height) min-w-(--radix-select-trigger-width) rounded-control border border-line bg-surface p-1 text-ink shadow-float">
             <RadixSelect.Viewport>
               {options.map((o) => (
                 <RadixSelect.Item key={o.value} value={o.value} className="flex items-center justify-between gap-2 rounded-control px-3 py-2 text-sm outline-none min-h-(--gg-tap-min) data-highlighted:bg-surface-2">

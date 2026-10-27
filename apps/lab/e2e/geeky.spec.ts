@@ -54,3 +54,18 @@ test('version tab shows the pinned version', async ({ page }) => {
   await page.getByRole('tab', { name: 'Versión' }).click();
   await expect(page.getByText(`v${geekyVersion}`, { exact: false }).first()).toBeVisible();
 });
+
+test('the action select follows intent changes and can pick the same action again', async ({ page }) => {
+  await page.goto('./?edition=none#/geeky');
+  const select = page.getByRole('combobox', { name: 'Acción exacta' });
+  const code = page.locator('[data-gg="geeky-snippet"]');
+  await select.click();
+  await page.getByRole('option', { name: /· Hola$/ }).click();
+  await expect(code).toContainText('action="waving"');
+  await page.locator('label', { hasText: /^Celebrar$/ }).click();
+  await expect(code).toContainText('intent="celebrate"');
+  await expect(select).toContainText('Según la intención');
+  await select.click();
+  await page.getByRole('option', { name: /· Hola$/ }).click();
+  await expect(code).toContainText('action="waving"');
+});

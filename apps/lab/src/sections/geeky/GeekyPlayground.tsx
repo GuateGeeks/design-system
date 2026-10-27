@@ -79,7 +79,8 @@ export function GeekyPlayground({ choice, onChange }: { choice: GeekyChoice; onC
           label="Acción exacta"
           placeholder="Según la intención"
           options={ACTION_OPTIONS}
-          value={choice.intent ? undefined : choice.action}
+          // Always controlled: '' shows the placeholder while an intent drives Geeky.
+          value={choice.intent ? '' : (choice.action ?? '')}
           onValueChange={(action) => set({ action, intent: undefined, paused: false })}
         />
 
