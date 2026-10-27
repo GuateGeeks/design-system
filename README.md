@@ -7,7 +7,7 @@ The laboratory where GuateGeeks decides, builds and proves how its products look
 - **Variants and editions** — structural changes through extension points (Progress today), bundled with a theme, content and dates into editions such as *Halloween 2026*.
 - **Components** — accessible React components on Radix, styled only with semantic tokens.
 - **3D** — the cotizador's papercraft engine ported to TypeScript: a render-on-demand stage with adaptive quality, an orbit camera, the papercraft kit, Geeky in 3D and the living campus, all following each theme's 3D profile.
-- **The lab** — Foundations, a Components page showing every component and state in one place (full-screen ones in phone/tablet/desktop frames), a Theme studio that exports `theme.json`, **Experiencias** (the campus: configure → live 3D → feedback) and **Kit 3D** (every papercraft piece).
+- **The lab** — Foundations, a Components page showing every component and state in one place (full-screen ones in phone/tablet/desktop frames), a Theme studio that exports `theme.json`, **Experiencias** (the campus: configure → live 3D → feedback; and the cotizador's previous low-poly school, kept as a historical reference), **Geeky** (how product teams use `<Geeky>`: live, with code) and **Kit 3D** (every papercraft piece).
 - **Agent pack** — context, skills and checklists so agents in product repos can adopt and sync the design.
 
 Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md](docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md). Delivered: phase 1 (foundation) and phase 2 (3D kit, campus experience, component motion). Next: more themes and editions (phase 3) and product adoption (phase 4).
@@ -22,7 +22,8 @@ Design and roadmap: [docs/superpowers/specs/2026-10-25-guategeeks-design-lab-des
 | [`@guategeeks/motion`](packages/motion) | motion presets and semantics with theme-aware durations |
 | [`@guategeeks/ui`](packages/ui) | React components, variant slots and the animated `Background` |
 | [`@guategeeks/three`](packages/three) | 3D stage, orbit camera, picking, papercraft kit, inspector; `/react` `ThreeHost` |
-| [`@guategeeks/mascot`](packages/mascot) | Geeky 3D, from [GuateGeeks/geeky-animation](https://github.com/GuateGeeks/geeky-animation) (`@guategeeks/geeky`, pinned by tag) |
+| [`@guategeeks/mascot`](packages/mascot) | Geeky from [GuateGeeks/geeky-animation](https://github.com/GuateGeeks/geeky-animation) (`@guategeeks/geeky`, pinned by tag): `<Geeky>` for product screens (`/react`), `createGeeky3D` for 3D scenes |
+| [`@guategeeks/experience-legacy-school`](experiences/legacy-school) | The cotizador's previous low-poly school, preserved byte-identical as a historical reference (private) |
 | [`@guategeeks/experience-campus`](experiences/campus) | The living campus: growth plan, scene, HUD, summary (reference experience, private) |
 
 ## Develop
@@ -63,7 +64,7 @@ Changes to `packages/*` carry a changeset (`npm run changeset`). All `@guategeek
 
 The lab deploys to GitHub Pages from `main` (Settings → Pages → Source: GitHub Actions).
 
-Geeky is made in GuateGeeks/geeky-animation. Each of its releases opens a pull request here (`.github/workflows/update-geeky.yml`, also weekly and on demand) that pins the new tag, runs the unit and end-to-end suites and flags the pull request when Geeky looks different (`packages/mascot/test/__snapshots__/geeky-signature.json`: meshes, vertices, colours and bounds of sampled poses; no screenshot renders Geeky). To update by hand: `npm run geeky:update -- <version>`. See [packages/mascot](packages/mascot/README.md).
+Geeky is made in GuateGeeks/geeky-animation. Each of its releases opens a pull request here (`.github/workflows/update-geeky.yml`, also weekly and on demand) that pins the new tag, runs the unit and end-to-end suites and flags the pull request when Geeky looks different (the 3D signature `packages/mascot/test/__snapshots__/geeky-signature.json` and the 2D gallery baselines). To update by hand: `npm run geeky:update -- <version>`. See [packages/mascot](packages/mascot/README.md).
 
 ## License
 

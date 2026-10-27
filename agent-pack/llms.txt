@@ -4,7 +4,7 @@
 
 ## Context
 
-- [Context for agents](CONTEXT.md): brand principles, layers, rules, packages, CSS order.
+- [Context for agents](CONTEXT.md): brand principles, layers, rules, packages, Geeky in product screens, CSS order.
 - [Design spec](../docs/superpowers/specs/2026-10-25-guategeeks-design-lab-design.md): why and how the lab is built.
 
 ## Skills

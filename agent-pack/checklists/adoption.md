@@ -10,5 +10,6 @@ Evidence for each item: a command and its output, or a screenshot.
 - [ ] Touch targets ≥ `--gg-tap-min`.
 - [ ] Screens checked in `guategeeks` light, `guategeeks` dark and `halloween`, at phone and desktop widths.
 - [ ] Reduced motion checked (OS setting and `data-motion="reduced"`): nothing essential depends on animation.
+- [ ] Geeky, if used, is `<Geeky>` from `@guategeeks/mascot/react` with an intent: one per screen, next to text that carries the message, with a pause control for looping intents longer than 5 seconds; no copied Geeky files in the product.
 - [ ] Accessibility scan (axe) shows no serious or critical violations on the main screens.
 - [ ] `?edition=halloween-2026` previews the edition; `?edition=none` returns to the brand.

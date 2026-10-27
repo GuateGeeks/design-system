@@ -39,7 +39,7 @@ jobs:
         run: node scripts/update-geeky.mjs "$REQUESTED"
       - if: steps.bump.outputs.changed == 'true'
         run: npm run build
-      # No e2e screenshot renders Geeky: its sampled poses (meshes, vertices, colours, bounds) are the visual check.
+      # The 3D Geeky's check: its sampled poses (meshes, vertices, colours, bounds). The 2D Geeky is in the visual baselines.
       - name: Geeky signature
         id: signature
         if: steps.bump.outputs.changed == 'true'
@@ -86,9 +86,9 @@ jobs:
               echo "- [x] Geeky signature unchanged: the sampled poses have the same meshes, vertices, colours and bounds"
             fi
             if [ "$SNAPSHOTS" = "updated" ]; then
-              echo "- [ ] ⚠️ Component visual baselines were updated: review the changed images (they do not include Geeky)"
+              echo "- [ ] ⚠️ Visual baselines were updated: review the changed images (the gallery's \`geeky\` frames show the 2D Geeky)"
             else
-              echo "- [x] \`npm run e2e\`: component visual baselines unchanged (they do not include Geeky)"
+              echo "- [x] \`npm run e2e\`: visual baselines unchanged, including the 2D Geeky gallery frames"
             fi
             if [ -z "$HAS_PAT" ]; then
               echo

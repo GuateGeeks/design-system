@@ -47,6 +47,17 @@ Edition priority at runtime: explicit user choice > `?edition=<id>` (preview; `?
 
 3D lives in `@guategeeks/three` (stage, orbit camera, papercraft kit, `ThreeHost`), `@guategeeks/mascot` (Geeky 3D, sourced from GuateGeeks/geeky-animation by release tag) and `@guategeeks/experience-campus` (the cotizador campus). Every theme has a 3D profile (`ResolvedTheme.three`: background, lights, paper grain, palette); scenes render on demand, respect reduced motion, stay within budgets and always ship a text alternative. See the [build-3d-experience skill](skills/build-3d-experience/SKILL.md).
 
+## Geeky in product screens
+
+Use `<Geeky>` from `@guategeeks/mascot/react` (three.js-free; `render="3d"` loads three.js on demand). Choose an **intent** — `welcome`, `goodbye`, `celebrate`, `reward`, `waiting`, `thinking`, `idea`, `attention`, `error`, `learning`, `idle` — rather than a raw action id. Colours and motion follow the theme.
+
+- The important message is always text; Geeky accompanies it. Without `label` Geeky is decorative.
+- One Geeky per screen, never covering content or controls; not for critical errors, payments, legal notices or long forms.
+- A looping intent (`waiting`, `thinking`) on screen for more than 5 seconds needs a pause control (`paused`).
+- Never copy or modify Geeky's files in a product: it comes from GuateGeeks/geeky-animation through `@guategeeks/mascot`.
+
+The lab's **Geeky** section shows each intent live with the code to copy.
+
 ## Consumer CSS, in this order
 
 ```css

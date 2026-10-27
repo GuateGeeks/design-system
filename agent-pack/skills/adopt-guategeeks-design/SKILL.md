@@ -52,6 +52,8 @@ Plain-JS products call `createThemeController({ themes, editions })` once at sta
 | guategeeks.github.io `text-strong-gray-900`, `bg-plum-400`, `text-sky-500` | `text-ink`, `bg-hero`, `text-accent` |
 | cotizador `#6942a1`, `#ff9d38`, Avenir | `--gg-color-hero`, `--gg-color-action`, `--gg-font-ui` |
 
+Replace any copied Geeky (Socrates' `src/design-system/geeky`, the cotizador's `asesor/lab/geeky`) with `<Geeky intent="…">` from `@guategeeks/mascot/react` (see CONTEXT.md, "Geeky in product screens"), and delete the copies.
+
 Socrates' `motion.ts` maps 1:1 to `@guategeeks/motion` (`play`, `stagger`, `flip`, `countUp`, same preset and semantic names). Remove its `setReducedMotion` calls: use the runtime's `setMotion`.
 
 ## 5. Verify
