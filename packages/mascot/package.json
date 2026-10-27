@@ -19,7 +19,7 @@
     "react": "19.3.1"
   },
   "dependencies": {
-    "@guategeeks/geeky": "github:GuateGeeks/geeky-animation#feature/live-embedding",
+    "@guategeeks/geeky": "github:GuateGeeks/geeky-animation#v1.2.0",
     "@guategeeks/theme-runtime": "0.1.0",
     "@guategeeks/themes": "0.1.0",
     "three": "0.186.1"
