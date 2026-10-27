@@ -5,3 +5,23 @@
 @import "@guategeeks/experience-campus/styles.css";
 
 body { margin: 0; }
+
+/* The legacy school's own elements (experiences/legacy-school): its canvas fills the stage and its
+   floating tag uses the lab's tokens. The stage backdrop is the cotizador's colour, set by the package. */
+[data-gg="legacy-school-stage"] .campus-canvas { display: block; width: 100%; height: 100%; }
+[data-gg="legacy-school-stage"] .campus-tag {
+  position: absolute; left: 0; top: 0; z-index: 2;
+  max-width: min(78%, 20rem);
+  padding: var(--gg-space-1) var(--gg-space-3);
+  border-radius: var(--gg-radius-pill);
+  background: var(--gg-color-surface);
+  color: var(--gg-color-ink);
+  font-size: var(--gg-size-xs);
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  pointer-events: none;
+  box-shadow: var(--gg-shadow-float);
+  will-change: transform;
+}
+[data-gg="legacy-school-stage"] .campus-tag[hidden] { display: none; }

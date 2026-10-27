@@ -10,17 +10,18 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@guategeeks/experience-campus": "0.1.0",
+    "@guategeeks/experience-legacy-school": "0.1.0",
+    "@guategeeks/mascot": "0.1.0",
     "@guategeeks/motion": "0.1.0",
     "@guategeeks/theme-runtime": "0.1.0",
     "@guategeeks/themes": "0.1.0",
+    "@guategeeks/three": "0.1.0",
     "@guategeeks/tokens": "0.1.0",
     "@guategeeks/ui": "0.1.0",
     "lucide-react": "1.61.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "@guategeeks/experience-campus": "0.1.0",
-    "@guategeeks/mascot": "0.1.0",
-    "@guategeeks/three": "0.1.0",
     "three": "0.186.1"
   },
   "devDependencies": {
