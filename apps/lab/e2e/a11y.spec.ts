@@ -23,7 +23,7 @@ for (const combo of COMBOS) {
   });
 }
 
-for (const section of ['foundations', 'components', 'studio', 'experiences', 'kit3d']) {
+for (const section of ['foundations', 'components', 'studio', 'experiences', 'geeky', 'kit3d']) {
   test(`${section} page is accessible`, async ({ page }) => {
     await page.goto(`./?edition=none#/${section}`);
     await page.getByRole('heading', { level: 2 }).first().waitFor();

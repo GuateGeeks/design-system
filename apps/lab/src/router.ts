@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import type { MotionPreference, SchemePreference } from '@guategeeks/theme-runtime';
 
-export type Section = 'foundations' | 'components' | 'studio' | 'experiences' | 'kit3d';
+export type Section = 'foundations' | 'components' | 'studio' | 'experiences' | 'geeky' | 'kit3d';
 
 export interface FrameParams {
   theme: string;
@@ -16,7 +16,7 @@ export type Route =
   | { frames: true }
   | { notFound: string };
 
-const SECTIONS: Section[] = ['foundations', 'components', 'studio', 'experiences', 'kit3d'];
+const SECTIONS: Section[] = ['foundations', 'components', 'studio', 'experiences', 'geeky', 'kit3d'];
 const SCHEMES: SchemePreference[] = ['auto', 'light', 'dark'];
 const MOTIONS: MotionPreference[] = ['auto', 'full', 'reduced'];
 
