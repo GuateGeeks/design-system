@@ -11,6 +11,7 @@
     "packages/mascot",
     "packages/three",
     "experiences/campus",
+    "experiences/legacy-school",
     "apps/lab"
   ],
   "scripts": {
