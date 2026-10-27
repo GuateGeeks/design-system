@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { loadSource, resolveTokens, toMs, type ResolvedToken } from '@guategeeks/tokens/build';
-import { checkContrast } from '../contrast.ts';
+import { checkContrast, contrastRatio } from '../contrast.ts';
 import { resolveThreeProfile } from '../three.ts';
 import type { DesignTokenTree, Edition, MotionIntensity, ResolvedTheme, SchemeName, ThemeManifest } from '../types.ts';
 import { validateManifest } from '../validate.ts';
@@ -98,6 +98,19 @@ export async function buildTheme(manifest: ThemeManifest, all: ThemeManifest[]):
     }
   }
 
+  // Geeky's palette per scheme along `extends`; the frame is a graphic, so 3:1 against the background (WCAG 1.4.11).
+  const mascot: ResolvedTheme['mascot'] = { palette: {} };
+  for (const scheme of manifest.schemes ?? []) {
+    const palette = Object.assign({}, ...lineage.map((m) => m.mascot?.palette?.[scheme] ?? {}));
+    if (!Object.keys(palette).length) continue;
+    mascot.palette[scheme] = palette;
+    const bg = values[scheme]?.['--gg-color-bg'];
+    if (palette.frame && bg) {
+      const ratio = contrastRatio(palette.frame, bg);
+      if (ratio < 3) errors.push(`${manifest.id} (${scheme}): Geeky frame ${palette.frame} contrast ${ratio.toFixed(2)} < 3`);
+    }
+  }
+
   const schemes = manifest.schemes ?? [];
   const resolved: ResolvedTheme = {
     id: manifest.id,
@@ -107,6 +120,7 @@ export async function buildTheme(manifest: ThemeManifest, all: ThemeManifest[]):
     intensity,
     ...(display ? { displayFont: { family: display.family } } : {}),
     three: resolveThreeProfile(...lineage.map((m) => m.three)),
+    mascot,
     values,
   };
   const build = { resolved, errors, tokens, fontImport: display?.import };

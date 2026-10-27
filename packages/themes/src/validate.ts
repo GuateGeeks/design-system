@@ -35,6 +35,26 @@ export function validateManifest(input: unknown): string[] {
     errors.push('fonts.display needs family and import');
   }
   if (m.three !== undefined) errors.push(...validateThree(m.three));
+  if (m.mascot !== undefined) errors.push(...validateMascot(m.mascot));
+  return errors;
+}
+
+export const MASCOT_PALETTE_KEYS = ['frame', 'back', 'lid', 'heart', 'blush'] as const;
+
+function validateMascot(mascot: unknown): string[] {
+  if (!isObject(mascot)) return ['mascot must be an object'];
+  const errors: string[] = [];
+  if (mascot.costume !== undefined && typeof mascot.costume !== 'string') errors.push('mascot.costume must be a string');
+  if (mascot.palette === undefined) return errors;
+  if (!isObject(mascot.palette)) return [...errors, 'mascot.palette must be an object'];
+  for (const [scheme, palette] of Object.entries(mascot.palette)) {
+    if (!SCHEMES.has(scheme)) { errors.push('mascot.palette keys must be light | dark'); continue; }
+    if (!isObject(palette)) { errors.push(`mascot.palette.${scheme} must be an object`); continue; }
+    for (const [key, value] of Object.entries(palette)) {
+      if (!(MASCOT_PALETTE_KEYS as readonly string[]).includes(key)) errors.push(`mascot.palette.${scheme}.${key} is not a palette key (${MASCOT_PALETTE_KEYS.join(', ')})`);
+      else if (!HEX.test(String(value))) errors.push(`mascot.palette.${scheme}.${key} must be a hex color`);
+    }
+  }
   return errors;
 }
 

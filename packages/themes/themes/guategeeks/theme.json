@@ -10,5 +10,12 @@
   },
   "three": {
     "profile": "papercraft"
+  },
+  "mascot": {
+    "palette": {
+      "dark": {
+        "frame": "#b8aee8"
+      }
+    }
   }
 }

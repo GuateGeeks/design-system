@@ -16,8 +16,18 @@ export interface ThemeManifest {
   motion?: { intensity: MotionIntensity };
   audio?: Record<string, string>;
   three?: ThreeProfileInput;
-  mascot?: { costume: string };
+  mascot?: { costume?: string; palette?: Partial<Record<SchemeName, MascotPalette>> };
   assets?: Record<string, string>;
+}
+
+/** Geeky's colours (hex), structurally @guategeeks/geeky's GeekyPalette. Unset keys keep Geeky's defaults. */
+export interface MascotPalette {
+  /** Rims, bridge, arms, brows and lid creases; needs 3:1 contrast against the scheme's background. */
+  frame?: string;
+  back?: string;
+  lid?: string;
+  heart?: string;
+  blush?: string;
 }
 
 export interface ResolvedTheme {
@@ -29,6 +39,8 @@ export interface ResolvedTheme {
   displayFont?: { family: string };
   /** 3D scene profile, merged along `extends`. */
   three: ThreeProfile;
+  /** Geeky's palette per scheme, merged along `extends` (child keys win). */
+  mascot: { palette: Partial<Record<SchemeName, MascotPalette>> };
   /** Keys are CSS custom property names, e.g. '--gg-color-action'. */
   values: Partial<Record<SchemeName, Record<string, string>>>;
 }

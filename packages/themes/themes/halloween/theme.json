@@ -135,5 +135,13 @@
       "frame": "#e6dccb",
       "wall": "#d8c2a2"
     }
+  },
+  "mascot": {
+    "palette": {
+      "dark": {
+        "frame": "#ff8a3d",
+        "lid": "#ffe2c4"
+      }
+    }
   }
 }
