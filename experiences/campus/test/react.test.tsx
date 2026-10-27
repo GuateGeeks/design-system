@@ -12,7 +12,7 @@ afterEach(() => cleanup());
 function fakeEngine() {
   const engine = {
     update: vi.fn(), resize: vi.fn(), rotate: vi.fn(), zoom: vi.fn(), resetView: vi.fn(), setPaused: vi.fn(), setReducedMotion: vi.fn(),
-    setFocus: vi.fn(), setInsets: vi.fn(), setHoverVerb: vi.fn(), setView: vi.fn(), setProfile: vi.fn(), capture: vi.fn(() => null),
+    setFocus: vi.fn(), setInsets: vi.fn(), setHoverVerb: vi.fn(), setView: vi.fn(), setProfile: vi.fn(), setGeekyPalette: vi.fn(), capture: vi.fn(() => null),
     getDiagnostics: vi.fn(() => ({ triangles: 1000, drawCalls: 20, materials: 8, framePending: false, contextLost: false })),
     getStage: vi.fn(), dispose: vi.fn(),
   };
@@ -23,6 +23,19 @@ const controller = () => createThemeController({ themes, editions, storageKey: n
 const data = stateInput(3) as CampusData;
 
 describe('CampusStage', () => {
+  it('passes the theme palette for the scene scheme to Geeky', () => {
+    const engine = fakeEngine();
+    const c = controller();
+    let options: Record<string, unknown> = {};
+    render(<ThemeProvider controller={c} options={{ themes, editions }}><CampusStage data={data} createScene={(_el, o) => { options = o as never; return engine; }} /></ThemeProvider>);
+    // Brand on its light papercraft scene keeps Geeky's own colours, even in the dark UI scheme.
+    expect(options.geekyPalette).toEqual({});
+    act(() => c.setScheme('dark'));
+    expect(engine.setGeekyPalette).not.toHaveBeenCalled();
+    act(() => c.setTheme('halloween'));
+    expect(engine.setGeekyPalette).toHaveBeenLastCalledWith({ frame: '#ff8a3d', lid: '#ffe2c4' });
+  });
+
   it('passes theme profile changes to setProfile', () => {
     const engine = fakeEngine();
     const c = controller();

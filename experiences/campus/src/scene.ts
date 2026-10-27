@@ -12,7 +12,7 @@ import {
   applyAssembly, backOut, bindStaged, clamp, createOrbit, createStage, lerp, paletteSignature, paperMaterials, pendingOf, pickAt,
   planAssembly, releaseEntityGroup, withPalette, type Stage, type StageOptions,
 } from '@guategeeks/three';
-import { createGeeky3D } from '@guategeeks/mascot';
+import { createGeeky3D, type GeekyPalette } from '@guategeeks/mascot';
 import { LEVEL_NAMES, PROGRAM_NAMES } from './layout.ts';
 import { planCampus } from './plan.ts';
 import { buildEntityGroup, entitySignature, groupPlan, selectionOf } from './entities.ts';
@@ -40,6 +40,8 @@ export interface CampusSceneOptions {
   /** The WebGL context came back: the scene redraws from the last data. */
   onRestored?(): void;
   onSelect?(selection: { kind: 'level' | 'program'; id: string }): void;
+  /** Geeky's colours (the theme's palette for the scene's scheme); unset keys keep Geeky's own. */
+  geekyPalette?: GeekyPalette;
 }
 
 export type CampusDiagnostics = Record<string, any> & {
@@ -70,6 +72,8 @@ export interface CampusScene {
   setHoverVerb(verb: string): void;
   setView(name: CampusView): void;
   setProfile(profile: ThreeProfile): void;
+  /** Rebuilds Geeky with these colours (theme changes); undefined restores Geeky's own. */
+  setGeekyPalette(palette?: GeekyPalette): void;
   capture(options?: { width?: number; height?: number }): string | null;
   getDiagnostics(): CampusDiagnostics;
   getStage(): Stage;
@@ -101,7 +105,7 @@ export function createCampusScene(container: HTMLElement, opts: CampusSceneOptio
   const marker = new Mesh(markerGeometry, markerMaterial);
   marker.rotation.x = -Math.PI / 2; marker.visible = false; marker.renderOrder = 3;
   scene.add(marker);
-  const geeky = createGeeky3D(materials, { reduced });
+  let geeky = createGeeky3D(materials, { reduced, palette: opts.geekyPalette });
   scene.add(geeky.group);
 
   // ---- state
@@ -578,6 +582,16 @@ export function createCampusScene(container: HTMLElement, opts: CampusSceneOptio
     new Set(Object.values(old)).forEach((material: Material) => { if (!Object.values(materials).includes(material as never)) material.dispose(); });
   }
 
+  function setGeekyPalette(palette?: GeekyPalette) {
+    if (disposed) return;
+    const visible = geeky.group.visible;
+    releaseEntityGroup(geeky.group);
+    geeky = createGeeky3D(materials, { reduced, palette });
+    geeky.group.visible = visible;
+    scene.add(geeky.group);
+    stage.requestFrame();
+  }
+
   update({});
   stage.resize();
 
@@ -588,6 +602,7 @@ export function createCampusScene(container: HTMLElement, opts: CampusSceneOptio
     zoom: delta => orbit.zoom(delta),
     resetView() { orbit.reset(); viewMode = 'overview'; frameBox = null; setFocus({ kind: 'overview' }); },
     setPaused(value) { paused = !!value; stage.setPaused(paused); if (paused) settle(); },
+    setGeekyPalette,
     setReducedMotion(value) { reduced = !!value; stage.setReducedMotion(reduced); if (reduced) settle(); },
     setFocus: next => setFocus(next),
     setInsets(next = {}) {

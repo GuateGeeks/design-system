@@ -70,6 +70,38 @@ describe('createCampusScene', () => {
     expect(s.getDiagnostics().entities).toBeGreaterThan(0);
   });
 
+  it('setGeekyPalette rebuilds Geeky without leaking geometries', () => {
+    const s = make();
+    s.update(stateInput(3));
+    frames();
+    const graph = s.getStage().scene;
+    const baseline = geometriesIn(graph);
+    s.setGeekyPalette({ frame: '#ff0000' });
+    frames();
+    s.setGeekyPalette(undefined);
+    frames();
+    expect(geometriesIn(graph)).toBe(baseline);
+  });
+
+  it('geeky uses the palette', () => {
+    const s = make({ geekyPalette: { frame: '#00ff00' } });
+    s.update(stateInput(1));
+    frames();
+    const coloured = (hex: string) => {
+      let found = false;
+      s.getStage().scene.traverse((o) => {
+        const c = (o as Mesh).isMesh ? (o as Mesh).geometry.getAttribute('color') : undefined;
+        if (c && c.getX(0) === parseInt(hex.slice(1, 3), 16) / 255 && c.getY(0) === parseInt(hex.slice(3, 5), 16) / 255 && c.getZ(0) === parseInt(hex.slice(5, 7), 16) / 255) found = true;
+      });
+      return found;
+    };
+    expect(coloured('#00ff00')).toBe(true);
+    s.setGeekyPalette({ frame: '#ff0000' });
+    frames();
+    expect(coloured('#ff0000')).toBe(true);
+    expect(coloured('#00ff00')).toBe(false);
+  });
+
   it('setView frames named views', () => {
     const s = make();
     s.update(stateInput(6));

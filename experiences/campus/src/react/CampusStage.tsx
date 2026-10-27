@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { getTheme, THREE_PROFILES, type ThreeProfile } from '@guategeeks/themes';
+import { geekyPalette, getTheme, THREE_PROFILES, type MascotPalette, type ResolvedTheme, type SchemeName, type ThreeProfile } from '@guategeeks/themes';
 import type { StageOptions } from '@guategeeks/three';
 import { ThreeHost } from '@guategeeks/three/react';
 import { useTheme } from '@guategeeks/theme-runtime/react';
@@ -27,10 +27,31 @@ export interface CampusStageProps {
   children?: ReactNode;
 }
 
+/** Relative luminance of a #rrggbb colour (WCAG). */
+function luminance(hex: string): number {
+  const channel = (i: number) => {
+    const c = parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255;
+    return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
+  };
+  return .2126 * channel(0) + .7152 * channel(1) + .0722 * channel(2);
+}
+
+/**
+ * Geeky's palette for the 3D scene: the scheme the scene looks like (its background), not the UI's. A theme
+ * without that scheme (Halloween is dark only) uses its default scheme.
+ */
+export function scenePalette(theme: ResolvedTheme | undefined, profile: ThreeProfile): MascotPalette {
+  const looks: SchemeName = /^#[0-9a-f]{6}$/i.test(profile.background) && luminance(profile.background) < .5 ? 'dark' : 'light';
+  return geekyPalette(theme, theme && !theme.schemes.includes(looks) ? theme.defaultScheme : looks);
+}
+
 /** The campus scene in React: theme profile and reduced motion follow the runtime live; the text summary takes over without WebGL. */
 export function CampusStage({ data, focus, view, paused = false, onSelect, onEngine, onState, diagnostics = false, createScene, createRenderer, className, children }: CampusStageProps) {
   const { theme, motion } = useTheme();
-  const profile: ThreeProfile = getTheme(theme)?.three ?? THREE_PROFILES.papercraft;
+  const resolved = getTheme(theme);
+  const profile: ThreeProfile = resolved?.three ?? THREE_PROFILES.papercraft;
+  const palette = scenePalette(resolved, profile);
+  const paletteKey = JSON.stringify(palette);
   const reduced = motion === 'reduced';
   const [engine, setEngine] = useState<CampusScene | null>(null);
   const [ready, setReady] = useState(false);
@@ -38,21 +59,22 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
   // `failed`: the engine could not start (no WebGL) — the host unmounts. `lost`: a context loss that may come back.
   const [failed, setFailed] = useState(false);
   const [stats, setStats] = useState<CampusDiagnostics | null>(null);
-  const latest = useRef({ onSelect, onEngine, profile, reduced });
-  latest.current = { onSelect, onEngine, profile, reduced };
-  const applied = useRef({ profile, reduced });
+  const latest = useRef({ onSelect, onEngine, profile, reduced, palette });
+  latest.current = { onSelect, onEngine, profile, reduced, palette };
+  const applied = useRef({ profile, reduced, paletteKey });
 
   const create = useMemo(() => (el: HTMLElement) => {
     const scene = (createScene ?? createCampusScene)(el, {
       profile: latest.current.profile,
       reducedMotion: latest.current.reduced,
+      geekyPalette: latest.current.palette,
       createRenderer,
       onReady: () => setReady(true),
       onLost: () => { setLost(true); setReady(false); },
       onRestored: () => setLost(false),
       onSelect: (selection) => latest.current.onSelect?.(selection),
     });
-    applied.current = { profile: latest.current.profile, reduced: latest.current.reduced };
+    applied.current = { profile: latest.current.profile, reduced: latest.current.reduced, paletteKey: JSON.stringify(latest.current.palette) };
     return scene;
   }, []);
 
@@ -62,6 +84,11 @@ export function CampusStage({ data, focus, view, paused = false, onSelect, onEng
     applied.current.profile = profile;
     engine.setProfile(profile);
   }, [engine, profile]);
+  useEffect(() => {
+    if (!engine || applied.current.paletteKey === paletteKey) return;
+    applied.current.paletteKey = paletteKey;
+    engine.setGeekyPalette?.(latest.current.palette);
+  }, [engine, paletteKey]);
   useEffect(() => {
     if (!engine || applied.current.reduced === reduced) return;
     applied.current.reduced = reduced;
